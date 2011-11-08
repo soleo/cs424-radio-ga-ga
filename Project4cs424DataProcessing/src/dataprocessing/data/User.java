@@ -1,11 +1,25 @@
 package dataprocessing.data;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class User {
 	
 	String userId;
 	char gender;
+	int age;
+	String country;
+	Date memberSince;
+	ArrayList<Artist> listensToArtists=new ArrayList<Artist>();
+	
+	public void addArtist(Artist artist)
+	{
+		listensToArtists.add(artist);
+	}
+	public ArrayList<Artist> getListensToArtists()
+	{
+		return listensToArtists;
+	}
 	public String getUserId() {
 		return userId;
 	}
@@ -36,8 +50,6 @@ public class User {
 	public void setMemberSince(Date memberSince) {
 		this.memberSince = memberSince;
 	}
-	int age;
-	String country;
-	Date memberSince;
+	
 
 }
