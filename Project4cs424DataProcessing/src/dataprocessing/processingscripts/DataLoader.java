@@ -9,6 +9,7 @@ import java.sql.Date;
 import java.util.HashMap;
 
 import dataprocessing.data.Artist;
+import dataprocessing.data.MiniArtist;
 import dataprocessing.data.User;
 
 public class DataLoader {
@@ -108,16 +109,26 @@ public class DataLoader {
 			String inputLineParts[]=inputLine.split("\t");
 			String userId=inputLineParts[0];
 			String artistId=inputLineParts[1];
+			
+			
 			String artistName=inputLineParts[2];
 			int airPlay=Integer.parseInt(inputLineParts[3]);
+			if(artistId.trim().equals(""))
+			{
+				artistId=artistName.trim().replaceAll(" ","_");
+			}
 			Artist artist=new Artist();	
 			artist.setArtistId(artistId);
 			artist.setArtistName(artistName);
 			artist.setArtistPlays(userId, airPlay);
+			MiniArtist miniArtist=new MiniArtist();
+			miniArtist.setAirPlay(airPlay);
+			miniArtist.setArtistId(artistId);
+			miniArtist.setArtistName(artistName);
 			if(uniqueUsers.containsKey(userId))
 			{
 				User user=uniqueUsers.get(userId);
-				user.addArtist(artist);
+				user.addArtist(miniArtist);
 				
 			}
 			

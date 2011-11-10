@@ -10,13 +10,13 @@ public class User {
 	int age;
 	String country;
 	Date memberSince;
-	ArrayList<Artist> listensToArtists=new ArrayList<Artist>();
+	ArrayList<MiniArtist> listensToArtists=new ArrayList<MiniArtist>();
 	
-	public void addArtist(Artist artist)
+	public void addArtist(MiniArtist artist)
 	{
 		listensToArtists.add(artist);
 	}
-	public ArrayList<Artist> getListensToArtists()
+	public ArrayList<MiniArtist> getListensToArtists()
 	{
 		return listensToArtists;
 	}
