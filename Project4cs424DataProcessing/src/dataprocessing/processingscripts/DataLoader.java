@@ -239,7 +239,7 @@ public class DataLoader {
 
 	void loadArtistData() throws Exception {
 
-		String inputFile = "/home/vivek/projects/workspace/Project4cs424DataProcessing/splitartist/usersha1-artmbid-artname-plays.tsvpart3";
+		String inputFile = "/home/vivek/projects/workspace/Project4cs424DataProcessing/splitartist/usersha1-artmbid-artname-plays.tsvpart6";
 
 		BufferedReader inputReader=new BufferedReader(new FileReader(new File(inputFile)));
 		
