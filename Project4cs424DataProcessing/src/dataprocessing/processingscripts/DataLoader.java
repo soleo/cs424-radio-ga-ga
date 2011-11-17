@@ -239,7 +239,7 @@ public class DataLoader {
 
 	void loadArtistData() throws Exception {
 
-		String inputFile = "/home/vivek/projects/workspace/Project4cs424DataProcessing/splitartist/usersha1-artmbid-artname-plays.tsvpart6";
+		String inputFile = "/home/vivek/projects/workspace/Project4cs424DataProcessing/lastfm-dataset-360K/usersha1-artmbid-artname-plays.tsv";
 
 		BufferedReader inputReader=new BufferedReader(new FileReader(new File(inputFile)));
 		
@@ -251,19 +251,27 @@ public class DataLoader {
 			String url="jdbc:mysql://localhost/gaga?user="+userName+"&password="+password;
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			conn=DriverManager.getConnection(url);
-//			Statement dropStatement=conn.createStatement();
-//			dropStatement.execute("DROP table IF EXISTS artist_schema");
-//			dropStatement.execute("DROP table IF EXISTS listens_to_schema");
-//			dropStatement.close();
-//			Statement createStatement=conn.createStatement();
-//			createStatement.execute("CREATE table artist_schema( artist_id varchar(512) NOT NULL PRIMARY KEY, artist_name varchar(255))");
-//			createStatement.execute("CREATE table listens_to_schema( user_id varchar(512) NOT NULL, artist_id varchar(512) NOT NULL, air_play INTEGER, FOREIGN KEY(user_id) REFERENCES user_schema(user_id), FOREIGN KEY(artist_id) REFERENCES artist_schema(artist_id))"); 			
-//			createStatement.close();
+			Statement dropStatement=conn.createStatement();
+			dropStatement.execute("DROP table IF EXISTS artist_schema");
+			dropStatement.execute("DROP table IF EXISTS listens_to_schema1");
+			dropStatement.close();
+			Statement createStatement=conn.createStatement();
+			createStatement.execute("CREATE table artist_schema( artist_id varchar(400) NOT NULL PRIMARY KEY, artist_name varchar(255))");
+			createStatement.execute("CREATE table listens_to_schema1( user_id varchar(512) NOT NULL, artist_id varchar(400) NOT NULL, air_play INTEGER, FOREIGN KEY(user_id) REFERENCES user_schema(user_id), FOREIGN KEY(artist_id) REFERENCES artist_schema(artist_id), PRIMARY KEY (user_id,artist_id))"); 			
+			createStatement.close();
+			long count=0;
+			Statement statement=null;
 			while(inputReader.ready())
 			{
-				Statement statement=conn.createStatement();
+				if(count==0)
+				{
+					statement=conn.createStatement();	
+				}
+				count++;
+				
 				
 				String inputLine=inputReader.readLine();
+				//System.out.println(inputLine);
 				String inputLineParts[]=inputLine.split("\t");
 				String userId=inputLineParts[0];
 				String artistId=inputLineParts[1];
@@ -296,19 +304,26 @@ public class DataLoader {
 				
 				try
 				{
-					
+					//System.out.println("here");
 					ResultSet artistQuery=statement.executeQuery("SELECT * FROM artist_schema WHERE artist_id=\'"+artistId+"\'");
 					if(!artistQuery.next())
 					{
 						statement.execute("INSERT into artist_schema(artist_id, artist_name) VALUES (\'"+artistId+"\', \'"+artistName+"\')");	
 					}
 					
-					ResultSet listensQuery=statement.executeQuery("SELECT * FROM listens_to_schema WHERE user_id= \'"+userId+"\' AND artist_id = \'"+artistId+"\'");
-					if(!listensQuery.next())
+					//ResultSet listensQuery=statement.executeQuery("SELECT * FROM listens_to_schema1 WHERE user_id= \'"+userId+"\' AND artist_id = \'"+artistId+"\'");
+					//if(!listensQuery.next())
 					{
-						statement.execute("INSERT into listens_to_schema(user_id,artist_id,air_play) VALUES (\'"+userId+"\',\'"+artistId+"\',\'"+airPlay+"\')");	
+						statement.execute("INSERT into listens_to_schema1(user_id,artist_id,air_play) VALUES (\'"+userId+"\',\'"+artistId+"\',\'"+airPlay+"\')");	
 					}
-					statement.close();		
+						
+					if(count==100000)
+					{
+						statement.close();
+						count=0;
+						System.out.println(count);	
+					}
+					
 				}
 				catch(SQLException e)
 				{
@@ -357,29 +372,39 @@ public class DataLoader {
 			
 			while(inputReader.ready())
 			{
-				Statement statement=conn.createStatement();
-				String inputLine=inputReader.readLine();
-				String inputLineParts[]=inputLine.split("\t");
-				String userId=inputLineParts[0];
-				String timeStamp=inputLineParts[1];
-				String artistId=inputLineParts[2];
-				String artistName=inputLineParts[3];
-				String trackId=inputLineParts[4];
-				String trackName=inputLineParts[5];
 				
-				ResultSet artistQuery=statement.executeQuery("Select * from artist_schema WHERE artist_id=\'"+artistId+"\'");
-				if(!artistQuery.next())
+				try
 				{
-					statement.execute("INSERT into artist_schema (artist_id, artist_name) VALUES (\'"+artistId+"\', \'"+artistName+"\')");
+					Statement statement=conn.createStatement();
+					String inputLine=inputReader.readLine();
+					String inputLineParts[]=inputLine.split("\t");
+					String userId=inputLineParts[0];
+					String timeStamp=inputLineParts[1];
+					String artistId=inputLineParts[2];
+					String artistName=inputLineParts[3];
+					String trackId=inputLineParts[4];
+					String trackName=inputLineParts[5];
+					ResultSet artistQuery=statement.executeQuery("Select * from artist_schema WHERE artist_id=\'"+artistId+"\'");
+					if(!artistQuery.next())
+					{
+						statement.execute("INSERT into artist_schema (artist_id, artist_name) VALUES (\'"+artistId+"\', \'"+artistName+"\')");
+						
+					}
+									
+					statement.execute("INSERT into track_schema(track_id, track_name) VALUES (\'"+trackId+"\',\'"+trackName+"\')");
 					
+					statement.execute("INSERT into listens_to_track_schema (user_id,artist_id,track_id,timestamp) VALUES " +
+							"(\'"+userId+"\', \'"+artistName+"\', \'"+trackId+"\', \'"+timeStamp+"\')");
+					
+					statement.close();
 				}
-								
-				statement.execute("INSERT into track_schema(track_id, track_name) VALUES (\'"+trackId+"\',\'"+trackName+"\')");
+				catch(SQLException e)
+				{
+					e.printStackTrace();
+					continue;
+				}
 				
-				statement.execute("INSERT into listens_to_track_schema (user_id,artist_id,track_id,timestamp) VALUES " +
-						"(\'"+userId+"\', \'"+artistName+"\', \'"+trackId+"\', \'"+timeStamp+"\')");
 				
-				statement.close();
 			}
 			
 		}
