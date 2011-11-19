@@ -11,10 +11,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 
-import dataprocessing.data.User;
+import dataprocessing.data.OldUser;
 
 public class DataLoader {
-	HashMap<String, User> uniqueUsers = new HashMap<String, User>();
+	HashMap<String, OldUser> uniqueUsers = new HashMap<String, OldUser>();
 
 	public static void main(String args[]) throws Exception {
 

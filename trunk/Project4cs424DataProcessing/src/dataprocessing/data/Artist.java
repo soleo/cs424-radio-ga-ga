@@ -1,43 +1,56 @@
 package dataprocessing.data;
 
-import java.util.HashMap;
+import java.io.Serializable;
+import java.util.ArrayList;
 
-/**
- * List of all Artists in the system if artist id is not present, id is computed
- * as artistName.toLower().replaceAll(" ","_"); OR get id from
- * MusicBrainz(undecided)
- * 
- * @author vivek
- * 
- */
-public class Artist {
-
+public class Artist implements Serializable{
+	
 	String artistId;
 	String artistName;
-	HashMap<String, Integer> artistPlays = new HashMap<String, Integer>();//key - userId value- airPlay
-
+	int totalListeners;
+	int maleListeners;
+	int femaleListeners;
+	ArrayList<String> listenersList=new ArrayList<String>();
 	public String getArtistId() {
 		return artistId;
 	}
-
 	public void setArtistId(String artistId) {
 		this.artistId = artistId;
 	}
-
 	public String getArtistName() {
 		return artistName;
 	}
-
 	public void setArtistName(String artistName) {
 		this.artistName = artistName;
 	}
-
-	public int getArtistPlays(String userId) {
-		return artistPlays.get(userId);
+	public int getTotalListeners() {
+		return totalListeners;
 	}
-
-	public void setArtistPlays(String userId, int count) {
-		this.artistPlays.put(userId, count);
+	public void setTotalListeners(int totalListeners) {
+		this.totalListeners = totalListeners;
 	}
+	public int getMaleListeners() {
+		return maleListeners;
+	}
+	public void setMaleListeners(int maleListeners) {
+		this.maleListeners = maleListeners;
+	}
+	public int getFemaleListeners() {
+		return femaleListeners;
+	}
+	public void setFemaleListeners(int femaleListeners) {
+		this.femaleListeners = femaleListeners;
+	}
+	
+	public void addListener(String userId)
+	{
+		this.listenersList.add(userId);
+	}
+	
+	public ArrayList<String> listListeners()
+	{
+		return listenersList;
+	}
+	
 
 }
