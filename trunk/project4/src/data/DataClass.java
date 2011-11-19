@@ -6,11 +6,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DataClass {
 	
-	ArrayList<String> countries;
-	
+	//ArrayList<String> countries;
+	HashMap<String, Country> countries;
 	
 	public DataClass()
 	{
@@ -28,7 +29,7 @@ public class DataClass {
 	void loadCountries() throws IOException, ClassNotFoundException
 	{
 		ObjectInputStream ois=new ObjectInputStream(new FileInputStream(new File("DataStore/countries.ser")));
-		countries=(ArrayList<String>)ois.readObject();
+		countries=(HashMap<String, Country>)ois.readObject();
 	}
 
 }
