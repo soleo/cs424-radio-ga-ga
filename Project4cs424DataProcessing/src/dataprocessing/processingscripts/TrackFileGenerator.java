@@ -82,10 +82,8 @@ public class TrackFileGenerator {
 				else
 				{
 					continue;
-				}
-				
-			}
-			
+				}				
+			}			
 			if(trackId.equals(""))
 			{
 				if(!trackName.trim().equals("") && trackName.trim().length()<=2)
@@ -95,23 +93,18 @@ public class TrackFileGenerator {
 				else
 				{
 					continue;
-				}
-				
+				}				
 			}
 			Track track=new Track();
 			track.setTrackId(trackId.trim());
-			track.setTrackName(trackName);
-			
+			track.setTrackName(trackName);			
 			if(!uniqueTracks.containsKey(trackId.trim()))
 			{
 				uniqueTracks.put(trackId.trim(), track);
-			}
-			
-			outputWriter.write(userId+"\t"+artistId+"\t"+trackId+"\t"+timeStamp+"\n");
-			
+			}			
+			outputWriter.write(userId+"\t"+artistId+"\t"+trackId+"\t"+timeStamp+"\n");			
 		}
-		outputWriter.close();
-		
+		outputWriter.close();		
 		outputWriter=new BufferedWriter(new FileWriter(new File("tracklist")));
 		Set<String> keys=uniqueTracks.keySet();
 		Iterator<String> keyIterator=keys.iterator();
@@ -121,8 +114,7 @@ public class TrackFileGenerator {
 			System.out.println(key);
 			Track track=uniqueTracks.get(key);
 			outputWriter.write(track.getTrackId().trim()+"\t"+track.getTrackName()+"\n");
-		}
-		
+		}		
 		outputWriter.close();
 	}
 
