@@ -10,13 +10,13 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.HashMap;
 
-import dataprocessing.data.User;
+import data.User;
 
 public class UserSerializer {
 	
 	public static void main(String args[])throws IOException
 	{
-		HashMap<String,User> userMap=new HashMap<String,User>();
+		HashMap<String,data.User> userMap=new HashMap<String,User>();
 		Connection conn;
 		try
 		{
