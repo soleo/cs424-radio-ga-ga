@@ -19,13 +19,25 @@ public class DataClass {
 	{
 		try
 		{
-			loadCountries();	
+			loadConnection();
+			loadCountries();
+			loadArtists();
 			System.out.println(countries.keySet().size());
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
+		
+	}
+	
+	void loadConnection()
+	{
+		
+	}
+	
+	void loadArtists()
+	{
 		
 	}
 	
