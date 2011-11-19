@@ -9,6 +9,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 import dataprocessing.data.Artist;
 
@@ -27,6 +29,8 @@ public class ArtistSerializer {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			conn=DriverManager.getConnection(url);
 			Statement userStatement=conn.createStatement();
+			
+			//to load the artist id and artist name
 			ResultSet rs=userStatement.executeQuery("Select * from artist_schema");
 			while(rs.next())
 			{
@@ -36,6 +40,49 @@ public class ArtistSerializer {
 				artist.setArtistId(artistId);
 				artist.setArtistName(artistName);
 				artistMap.put(artistId, artist);
+			}
+			
+			Set<String> keys=artistMap.keySet();
+			Iterator<String> keysIterator=keys.iterator();
+			while(keysIterator.hasNext())
+			{
+				String artistId = keysIterator.next();
+				System.out.println(artistId);
+				Artist artist=artistMap.get(artistId);
+				String artistKey=artist.getArtistId().replaceAll("\'", "\\\\'").replaceAll("/", "\\\\/");
+				
+				ResultSet listenerRs=userStatement.executeQuery("Select count(*) from artist_schema join listens_to_schema1 on artist_schema.artist_id=listens_to_schema1.artist_id where artist_schema.artist_id=\'"+artistKey+"\'");
+				listenerRs.first();
+				int totalListeners=listenerRs.getInt(1);
+				System.out.println(artistId+"\t"+totalListeners);
+				artist.setTotalListeners(totalListeners);
+				
+				ResultSet maleListenerRs=userStatement.executeQuery("Select count(*) from artist_schema join listens_to_schema1 on artist_schema.artist_id=listens_to_schema1.artist_id join user_schema on listens_to_schema1.user_id= user_schema.user_id where artist_schema.artist_id=\'"+artistKey+"\' and user_schema.gender=\'m\'");
+				maleListenerRs.first();
+				int maleListeners=maleListenerRs.getInt(1);
+				System.out.println(artistId+"\t"+maleListeners);
+				artist.setMaleListeners(maleListeners);
+				
+				ResultSet femaleListenerRs=userStatement.executeQuery("Select count(*) from artist_schema join listens_to_schema1 on artist_schema.artist_id=listens_to_schema1.artist_id join user_schema on listens_to_schema1.user_id= user_schema.user_id where artist_schema.artist_id=\'"+artistKey+"\' and user_schema.gender=\'f\'");
+				
+				femaleListenerRs.first();
+				
+				int femaleListeners=femaleListenerRs.getInt(1);
+				System.out.println(artistId+"\t"+femaleListeners);
+				artist.setFemaleListeners(femaleListeners);
+				
+				
+				//list of listeners
+				
+				ResultSet listeners=userStatement.executeQuery("Select user_schema.user_id from user_schema join listens_to_schema1 on user_schema.user_id=listens_to_schema1.user_id join artist_schema on listens_to_schema1.artist_id=artist_schema.artist_id where artist_schema.artist_id=\'"+artistKey+"\'");
+				while(listeners.next())
+				{
+					artist.addListener(listeners.getString(1));
+				}
+				
+				artistMap.put(artistId, artist);
+				
+				
 			}
 			
 			
