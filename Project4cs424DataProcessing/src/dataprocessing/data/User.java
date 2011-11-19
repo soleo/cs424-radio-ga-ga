@@ -1,42 +1,41 @@
 package dataprocessing.data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 
-public class User {
+public class User implements Serializable{
 	
 	String userId;
-	char gender;
-	int age;
 	String country;
-	Date memberSince;
-	ArrayList<MiniArtist> listensToArtists=new ArrayList<MiniArtist>();
+	int age;
+	String gender;
+	String memberSince;
 	
-	public void addArtist(MiniArtist artist)
-	{
-		listensToArtists.add(artist);
-	}
-	public ArrayList<MiniArtist> getListensToArtists()
-	{
-		return listensToArtists;
-	}
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-	public char getGender() {
-		return gender;
-	}
-	public void setGender(char gender) {
-		this.gender = gender;
-	}
+	
 	public int getAge() {
 		return age;
 	}
 	public void setAge(int age) {
 		this.age = age;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	public String getMemberSince() {
+		return memberSince;
+	}
+	public void setMemberSince(String memberSince) {
+		this.memberSince = memberSince;
+	}
+	ArrayList<String> listensTo=new ArrayList<String>();
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 	public String getCountry() {
 		return country;
@@ -44,12 +43,13 @@ public class User {
 	public void setCountry(String country) {
 		this.country = country;
 	}
-	public Date getMemberSince() {
-		return memberSince;
+	public void addArtist(String artistId)
+	{
+		listensTo.add(artistId);
 	}
-	public void setMemberSince(Date memberSince) {
-		this.memberSince = memberSince;
+	public ArrayList<String> listensList()
+	{
+		return listensTo;
 	}
-	
 
 }
