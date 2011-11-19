@@ -1,17 +1,18 @@
 package dataprocessing.processingscripts;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Iterator;
+import java.util.Set;
 
 import data.Country;
 
@@ -26,7 +27,7 @@ public class CountriesSerializer {
 	{
 		BufferedReader inputReader=new BufferedReader(new FileReader(new File("outputs/countries")));
 		//List<String> countriesList=new ArrayList<String>();
-		HashMap<String, Country> countryList = new HashMap<String, Country>();
+		HashMap<String, Country> countryMap = new HashMap<String, Country>();
 		
 		HashMap<String, String> iso = new HashMap<String, String>();
 		BufferedReader cnIsoReader=new BufferedReader(new FileReader(new File("outputs/country.tsv")));
@@ -61,7 +62,7 @@ public class CountriesSerializer {
 				c.timeZoneOffset = new String(data[1].trim());
 			
 				//countriesList.add(inputLine);
-				countryList.put(c.name, c);
+				countryMap.put(c.name, c);
 			}
 			else
 			{
@@ -77,9 +78,62 @@ public class CountriesSerializer {
 		}*/
 		//Collections.sort(countryList);
 		
+		Connection conn;
+		
+		try
+		{
+			String userName="root";
+			String password="tigger";
+			String url="jdbc:mysql://localhost/gaga?user="+userName+"&password="+password;
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			conn=DriverManager.getConnection(url);
+			Statement userStatement=conn.createStatement();
+			
+			Set<String> countryKeys=countryMap.keySet();
+			Iterator<String> countryKeysIterator=countryKeys.iterator();
+			
+			while(countryKeysIterator.hasNext())
+			{
+				String key=countryKeysIterator.next();
+				Country country=countryMap.get(key);
+				
+				ResultSet rs=userStatement.executeQuery("Select count(*) from user_schema join listens_to_schema1 on user_schema.user_id=listens_to_schema1.user_id where user_schema.country=\'"+country+"\'");
+				rs.first();
+				int totalListeners=rs.getInt(1);
+				System.out.println(totalListeners);
+				country.setTotalListeners(totalListeners);
+				rs.close();
+				
+				ResultSet maleRs=userStatement.executeQuery("Select count(*) from user_schema join listens_to_schema1 on user_schema.user_id=listens_to_schema1.user_id where user_schema.country=\'"+country+"\' AND user_schema.gender=\'m\'");
+				int maleListeners=maleRs.getInt(1);
+				System.out.println(maleListeners);
+				country.setMaleListeners(maleListeners);
+				maleRs.close();
+				
+				
+				ResultSet femaleRs=userStatement.executeQuery("Select count(*) from user_schema join listens_to_schema1 on user_schema.user_id=listens_to_schema1.user_id where user_schema.country=\'"+country+"\' AND user_schema.gender=\'f\'");
+				femaleRs.first();
+				int femaleListeners=femaleRs.getInt(1);
+				System.out.println(femaleListeners);
+				country.setFemaleListeners(femaleListeners);
+				femaleRs.close();
+			
+				
+				
+				
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		
+		
+		
 		ObjectOutputStream oos=new ObjectOutputStream(new FileOutputStream(new File("/home/vivek/projects/workspace/visproj4/project4/DataStore/countries.ser")));
 		//ObjectOutputStream oos=new ObjectOutputStream(new FileOutputStream(new File("countries.ser")));
-		oos.writeObject(countryList);
+		oos.writeObject(countryMap);
 		oos.close();
 	}
 
