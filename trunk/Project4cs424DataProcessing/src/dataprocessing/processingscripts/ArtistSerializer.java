@@ -12,13 +12,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-import dataprocessing.data.Artist;
+import data.Artist;
+
+
 
 public class ArtistSerializer {
 	
 	public static void main(String args[]) throws IOException
 	{
-		HashMap<String, Artist> artistMap=new HashMap<String, Artist>();
+		HashMap<String, Artist> artistMap=new HashMap<String, data.Artist>();
 		Connection conn;
 		
 		try

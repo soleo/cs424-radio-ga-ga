@@ -13,6 +13,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import data.Country;
+
+
+
 
 public class CountriesSerializer {
 	
@@ -73,8 +77,8 @@ public class CountriesSerializer {
 		}*/
 		//Collections.sort(countryList);
 		
-		//ObjectOutputStream oos=new ObjectOutputStream(new FileOutputStream(new File("/home/vivek/projects/workspace/visproj4/project4/DataStore/countries.ser")));
-		ObjectOutputStream oos=new ObjectOutputStream(new FileOutputStream(new File("countries.ser")));
+		ObjectOutputStream oos=new ObjectOutputStream(new FileOutputStream(new File("/home/vivek/projects/workspace/visproj4/project4/DataStore/countries.ser")));
+		//ObjectOutputStream oos=new ObjectOutputStream(new FileOutputStream(new File("countries.ser")));
 		oos.writeObject(countryList);
 		oos.close();
 	}
