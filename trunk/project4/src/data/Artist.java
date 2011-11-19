@@ -1,8 +1,9 @@
 package data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Artist {
+public class Artist implements Serializable{
 	
 	String artistId;
 	String artistName;
