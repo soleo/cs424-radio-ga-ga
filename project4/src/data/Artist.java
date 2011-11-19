@@ -9,7 +9,15 @@ public class Artist implements Serializable{
 	String artistName;
 	int totalListeners;
 	int maleListeners;
+	public int getUnknownListeners() {
+		return unknownListeners;
+	}
+	public void setUnknownListeners(int unknownListeners) {
+		this.unknownListeners = unknownListeners;
+	}
+
 	int femaleListeners;
+	int unknownListeners;
 	ArrayList<String> listenersList=new ArrayList<String>();
 	public String getArtistId() {
 		return artistId;
