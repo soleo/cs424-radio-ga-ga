@@ -2,7 +2,7 @@ package project;
 
 import controlP5.ControlP5;
 import processing.core.*;
-
+import data.*;
 
 public class MainSketch extends PApplet {
 	
@@ -14,6 +14,7 @@ Menu theMenu;
 		Utils.globalProcessing.smooth();
 		Utils.controlP5 = new ControlP5(this);
 		theMenu = new Menu(200);	
+		DataClass d=new DataClass();
 	}
 	public void draw(){
 		theMenu.drawContent();

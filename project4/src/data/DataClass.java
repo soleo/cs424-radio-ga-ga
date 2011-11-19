@@ -11,13 +11,14 @@ import java.util.HashMap;
 public class DataClass {
 	
 	//ArrayList<String> countries;
-	HashMap<String, Country> countries;
+	HashMap<String, data.Country> countries = new HashMap<String, data.Country>();
 	
 	public DataClass()
 	{
 		try
 		{
 			loadCountries();	
+			System.out.println(countries.keySet().size());
 		}
 		catch(Exception e)
 		{
@@ -28,8 +29,8 @@ public class DataClass {
 	
 	void loadCountries() throws IOException, ClassNotFoundException
 	{
-		ObjectInputStream ois=new ObjectInputStream(new FileInputStream(new File("DataStore/countries.ser")));
-		countries=(HashMap<String, Country>)ois.readObject();
+		ObjectInputStream ois=new ObjectInputStream(new FileInputStream(new File("../DataStore/countries.ser")));
+		countries=(HashMap<String, data.Country>)ois.readObject();
 	}
 
 }
