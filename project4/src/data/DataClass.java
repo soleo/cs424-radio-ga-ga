@@ -2,16 +2,18 @@ package data;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.ArrayList;
+import java.sql.Connection;
 import java.util.HashMap;
 
 public class DataClass {
 	
 	//ArrayList<String> countries;
-	HashMap<String, data.Country> countries = new HashMap<String, data.Country>();
+	HashMap<String, Country> countries = new HashMap<String, Country>();
+	Connection conn;
+	HashMap<String,Artist> artistMap=new HashMap<String,Artist>();
+	HashMap<String, User> userMap=new HashMap<String, User>();
 	
 	public DataClass()
 	{
