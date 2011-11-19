@@ -3,6 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="lib" path="/Users/YT/Documents/project3g1/project3g1/core.jar"/>
-	<classpathentry kind="lib" path="/visproj3/lib/core.jar"/>
+	<classpathentry kind="lib" path="/Users/YT/Downloads/controlP5-1/library/controlP5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
