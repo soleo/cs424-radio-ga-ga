@@ -99,40 +99,41 @@ public class CountriesSerializer {
 			Set<String> countryKeys=countryMap.keySet();
 			Iterator<String> countryKeysIterator=countryKeys.iterator();
 			
+			int totalListeners;
+			int maleListeners;
+			int femaleListeners;
+			int count=0;
 			while(countryKeysIterator.hasNext())
 			{
+				count++;
+				System.out.println(count);
 				String key=countryKeysIterator.next();
 				Country country=countryMap.get(key);
-				String countryKey=countryMapSer.get(country.getName());
-				
-				
+				String countryKey=countryMapSer.get(country.getName()).replaceAll("'", "\\\\'");
+							
 				ResultSet rs=userStatement.executeQuery("Select count(*) from user_schema join listens_to_schema1 on user_schema.user_id=listens_to_schema1.user_id where user_schema.country=\'"+countryKey+"\'");
-				rs.first();
-				int totalListeners=rs.getInt(1);
-				System.out.println(totalListeners);
+				rs.first();	
+				totalListeners=rs.getInt(1);
+				
 				country.setTotalListeners(totalListeners);
-				rs.close();
-				
+							
 				ResultSet maleRs=userStatement.executeQuery("Select count(*) from user_schema join listens_to_schema1 on user_schema.user_id=listens_to_schema1.user_id where user_schema.country=\'"+countryKey+"\' AND user_schema.gender=\'m\'");
-				maleRs.first();
-				int maleListeners=maleRs.getInt(1);
-				System.out.println(maleListeners);
+				maleRs.first();			
+				maleListeners=maleRs.getInt(1);
 				country.setMaleListeners(maleListeners);
-				maleRs.close();
-				
-				
+								
 				ResultSet femaleRs=userStatement.executeQuery("Select count(*) from user_schema join listens_to_schema1 on user_schema.user_id=listens_to_schema1.user_id where user_schema.country=\'"+countryKey+"\' AND user_schema.gender=\'f\'");
-				femaleRs.first();
-				int femaleListeners=femaleRs.getInt(1);
-				System.out.println(femaleListeners);
+				femaleRs.first();		
+				femaleListeners=femaleRs.getInt(1);
 				country.setFemaleListeners(femaleListeners);
-				femaleRs.close();
-				
+								
 				country.setUnknownListeners(totalListeners-(maleListeners+femaleListeners));
 			
+				rs.close();
+				maleRs.close();
+				femaleRs.close();
 				
-				
-				
+				countryMap.put(key, country);
 			}
 		}
 		catch(Exception e)
