@@ -113,7 +113,7 @@ public class DataClass {
 		return ageGroups;
 	}
 		
-	ArrayList<Artist> getTop100ArtistByGender(String gender);
+	ArrayList<Artist> getTop100ArtistByGender(String gender)
 	{
 		
 	}
