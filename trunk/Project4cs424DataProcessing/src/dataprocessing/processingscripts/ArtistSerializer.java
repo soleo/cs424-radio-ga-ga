@@ -57,40 +57,49 @@ public class ArtistSerializer {
 			
 			while(keysIterator.hasNext())
 			{
-				count++;
-				System.out.println(count);
-				String artistId = keysIterator.next();
-				//System.out.println(artistId);
-				Artist artist=artistMap.get(artistId);
-				String artistKey=artist.getArtistId().replaceAll("\'", "\\\\'").replaceAll("/", "\\\\/");
-				
-				ResultSet listenerRs=userStatement.executeQuery("Select count(*) from artist_schema join listens_to_schema1 on artist_schema.artist_id=listens_to_schema1.artist_id where artist_schema.artist_id=\'"+artistKey+"\'");
-				listenerRs.first();	
-				totalListeners=listenerRs.getInt(1);
-//				System.out.println(artistId+"\t"+totalListeners);
-				artist.setTotalListeners(totalListeners);
-				listenerRs.close();
-				
-				ResultSet maleListenerRs=userStatement.executeQuery("Select count(*) from artist_schema join listens_to_schema1 on artist_schema.artist_id=listens_to_schema1.artist_id join user_schema on listens_to_schema1.user_id= user_schema.user_id where artist_schema.artist_id=\'"+artistKey+"\' and user_schema.gender=\'m\'");
-				maleListenerRs.first();				
-				maleListeners=maleListenerRs.getInt(1);
-	//			System.out.println(artistId+"\t"+maleListeners);
-				artist.setMaleListeners(maleListeners);
-				maleListenerRs.close();
-				
-				ResultSet femaleListenerRs=userStatement.executeQuery("Select count(*) from artist_schema join listens_to_schema1 on artist_schema.artist_id=listens_to_schema1.artist_id join user_schema on listens_to_schema1.user_id= user_schema.user_id where artist_schema.artist_id=\'"+artistKey+"\' and user_schema.gender=\'f\'");
-				femaleListenerRs.first();
-				femaleListeners=femaleListenerRs.getInt(1);
-	//			System.out.println(artistId+"\t"+femaleListeners);
-				artist.setFemaleListeners(femaleListeners);
-				femaleListenerRs.close();
+				try
+				{
+					count++;
+					System.out.println(count);
+					String artistId = keysIterator.next();
+					//System.out.println(artistId);
+					Artist artist=artistMap.get(artistId);
+					String artistKey=artist.getArtistId().replaceAll("\'", "\\\\'").replaceAll("/", "\\\\/");
+					
+					ResultSet listenerRs=userStatement.executeQuery("Select count(*) from artist_schema join listens_to_schema1 on artist_schema.artist_id=listens_to_schema1.artist_id where artist_schema.artist_id=\'"+artistKey+"\'");
+					listenerRs.first();	
+					totalListeners=listenerRs.getInt(1);
+//					System.out.println(artistId+"\t"+totalListeners);
+					artist.setTotalListeners(totalListeners);
+					listenerRs.close();
+					
+					ResultSet maleListenerRs=userStatement.executeQuery("Select count(*) from artist_schema join listens_to_schema1 on artist_schema.artist_id=listens_to_schema1.artist_id join user_schema on listens_to_schema1.user_id= user_schema.user_id where artist_schema.artist_id=\'"+artistKey+"\' and user_schema.gender=\'m\'");
+					maleListenerRs.first();				
+					maleListeners=maleListenerRs.getInt(1);
+		//			System.out.println(artistId+"\t"+maleListeners);
+					artist.setMaleListeners(maleListeners);
+					maleListenerRs.close();
+					
+					ResultSet femaleListenerRs=userStatement.executeQuery("Select count(*) from artist_schema join listens_to_schema1 on artist_schema.artist_id=listens_to_schema1.artist_id join user_schema on listens_to_schema1.user_id= user_schema.user_id where artist_schema.artist_id=\'"+artistKey+"\' and user_schema.gender=\'f\'");
+					femaleListenerRs.first();
+					femaleListeners=femaleListenerRs.getInt(1);
+		//			System.out.println(artistId+"\t"+femaleListeners);
+					artist.setFemaleListeners(femaleListeners);
+					femaleListenerRs.close();
 
-				artist.setUnknownListeners(totalListeners-(maleListeners+femaleListeners));
-				//list of listeners
-						
+					artist.setUnknownListeners(totalListeners-(maleListeners+femaleListeners));
+					//list of listeners
+							
+									
+					artistMap.put(artistId, artist);
+	 
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+					continue;
+				}
 								
-				artistMap.put(artistId, artist);
-				
 				
 			}
 			
