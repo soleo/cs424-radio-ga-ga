@@ -1,7 +1,9 @@
 package dataprocessing.processingscripts;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.sql.Connection;
@@ -46,6 +48,18 @@ public class ArtistSerializer {
 			}
 			rs.close();
 			
+			HashMap<String,String> artistMb=new HashMap<String,String>();
+			BufferedReader inputReader=new BufferedReader(new FileReader(new File("/home/vivek/projects/workspace/Project4cs424DataProcessing/outputs/musicbrainz_new.tsv")));
+			
+			while(inputReader.ready())
+			{
+				String inputLine=inputReader.readLine();
+				String artistId=inputLine.split("\t")[1].trim();
+				artistMb.put(artistId, inputLine);
+			}
+			
+			
+			
 			Set<String> keys=artistMap.keySet();
 			Iterator<String> keysIterator=keys.iterator();
 			
@@ -88,9 +102,53 @@ public class ArtistSerializer {
 					femaleListenerRs.close();
 
 					artist.setUnknownListeners(totalListeners-(maleListeners+femaleListeners));
-					//list of listeners
-							
-									
+					//age group
+					ResultSet ageGroup=userStatement.executeQuery("Select count(*) from user_schema , listens_to_schema1, artist_schema where user_schema.user_id=listens_to_schema1.user_id and artist_schema.artist_id = listens_to_schema1.artist_id and artist_schema.artist_id=\'"+artistKey+"\' and user_schema.age>=13 and user_schema.age<=18");
+					ageGroup.first();
+					artist.addGroupListeners("13-18", ageGroup.getInt(1));
+					
+					ageGroup=userStatement.executeQuery("Select count(*) from user_schema , listens_to_schema1, artist_schema where user_schema.user_id=listens_to_schema1.user_id and artist_schema.artist_id = listens_to_schema1.artist_id and artist_schema.artist_id=\'"+artistKey+"\' and user_schema.age>=19 and user_schema.age<=24");
+					ageGroup.first();
+					artist.addGroupListeners("19-24", ageGroup.getInt(1));
+					
+					ageGroup=userStatement.executeQuery("Select count(*) from user_schema , listens_to_schema1, artist_schema where user_schema.user_id=listens_to_schema1.user_id and artist_schema.artist_id = listens_to_schema1.artist_id and artist_schema.artist_id=\'"+artistKey+"\' and user_schema.age>=25 and user_schema.age<=35");
+					ageGroup.first();
+					artist.addGroupListeners("25-35", ageGroup.getInt(1));
+					
+					ageGroup=userStatement.executeQuery("Select count(*) from user_schema , listens_to_schema1, artist_schema where user_schema.user_id=listens_to_schema1.user_id and artist_schema.artist_id = listens_to_schema1.artist_id and artist_schema.artist_id=\'"+artistKey+"\' and user_schema.age>=36 and user_schema.age<=45");
+					ageGroup.first();
+					artist.addGroupListeners("36-45", ageGroup.getInt(1));
+					
+					ageGroup=userStatement.executeQuery("Select count(*) from user_schema , listens_to_schema1, artist_schema where user_schema.user_id=listens_to_schema1.user_id and artist_schema.artist_id = listens_to_schema1.artist_id and artist_schema.artist_id=\'"+artistKey+"\' and user_schema.age>=46 and user_schema.age<=64");
+					ageGroup.first();
+					artist.addGroupListeners("46-64", ageGroup.getInt(1));
+					
+					ageGroup=userStatement.executeQuery("Select count(*) from user_schema , listens_to_schema1, artist_schema where user_schema.user_id=listens_to_schema1.user_id and artist_schema.artist_id = listens_to_schema1.artist_id and artist_schema.artist_id=\'"+artistKey+"\' and user_schema.age>=65");
+					ageGroup.first();
+					artist.addGroupListeners("65 and above", ageGroup.getInt(1));
+														
+					
+					if(artistMb.containsKey(artistId))
+					{
+						String line=artistMb.get(artistId);
+						String birthDate=line.split("\t")[2].trim();
+						String country=line.split("\t")[5].trim();
+						String type=line.split("\t")[4].trim();
+						String gender=line.split("\t")[6].trim();
+						System.out.println(artist.getArtistName());
+						artist.setBirthDate(birthDate);
+						artist.setCountry(country);
+						artist.setType(type);
+						artist.setGender(gender);
+					}
+					else
+					{
+						artist.setBirthDate("");
+						artist.setCountry("");
+						artist.setType("");
+						artist.setGender("");
+					}
+										
 					artistMap.put(artistId, artist);
 	 
 				}
