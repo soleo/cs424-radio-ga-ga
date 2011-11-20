@@ -18,7 +18,8 @@ public class Artist implements Serializable{
 	String country;
 	String gender;
 	
-
+	
+	HashMap<String,Integer> ageGroupListeners=new HashMap<String,Integer>();
 	
 	public String getBirthDate() {
 		return birthDate;
@@ -43,28 +44,21 @@ public class Artist implements Serializable{
 	}
 	public void setGender(String gender) {
 		this.gender = gender;
-	}
-	
-	HashMap<String,Integer> ageGroupListeners=new HashMap<String,Integer>();
-	
-	
+	}	
 	public void addGroupListeners(String key,int listenerCount)
 	{
 		ageGroupListeners.put(key, listenerCount);
-	}
-	
+	}	
 	public int getGroupListenersByGroup(String key)
 	{
 		return ageGroupListeners.get(key);
-	}
-	
+	}	
 	public int getUnknownListeners() {
 		return unknownListeners;
 	}
 	public void setUnknownListeners(int unknownListeners) {
 		this.unknownListeners = unknownListeners;
-	}
-	
+	}	
 	public String getArtistId() {
 		return artistId;
 	}
@@ -95,10 +89,4 @@ public class Artist implements Serializable{
 	public void setFemaleListeners(int femaleListeners) {
 		this.femaleListeners = femaleListeners;
 	}
-	
-	
-	
-	
-	
-
 }
