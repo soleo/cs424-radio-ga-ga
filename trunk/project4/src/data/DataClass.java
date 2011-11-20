@@ -6,6 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -108,6 +111,62 @@ public class DataClass {
 	ArrayList<String> getAgeGroups()
 	{
 		return ageGroups;
+	}
+		
+	ArrayList<Artist> getTop100ArtistByGender(String gender);
+	{
+		
+	}
+	ArrayList<Artist> getTop100ArtistByAgeGroup(String ageGroup)
+	{
+		
+	}
+	
+	ArrayList<Artist> getTop100ArtistByCountry(String country)
+	{
+		
+	}
+	
+	ArrayList<Artist> getTop100ArtistByAgeGroupAndCountry(String ageGroup,String country)
+	{
+		
+	}
+	
+	ArrayList<Artist> getTop100ArtistByAgeGroupAndGender(String ageGroup,String Gender)
+	{
+		
+	}
+	ArrayList<Artist> getTop100ArtistByGenderAndCountry(String gender,String country)
+	{
+		
+	}
+	ArrayList<Artist> getTop100ArtistByGenderAndAgeGroupAndCountry(String gender,String ageGroup,String country)
+	{
+		
+	}
+	
+	
+	ArrayList<Artist> getTop100Artists(String gender,String ageGroup,String country)
+	{
+		ArrayList<Artist> artistList;
+		try {
+			
+		
+			if(gender.trim().equals("")&& ageGroup.trim().equals("")&&country.trim().equals(""))
+			{
+				Statement s;				
+				s = conn.createStatement();				
+				ResultSet rs=s.executeQuery("");
+				while(rs.next())
+				{
+					String artistId=rs.getString(1);
+					
+				}
+			}			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	
