@@ -2,9 +2,11 @@ package dataprocessing.processingscripts;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -23,8 +25,13 @@ public class CountriesSerializer {
 	
 	
 	
-	public static void main(String args[])throws IOException
+	public static void main(String args[])throws IOException, ClassNotFoundException
 	{
+		
+		HashMap<String,String> countryMapSer;
+		ObjectInputStream ois=new ObjectInputStream(new FileInputStream(new File("countryMap.ser")));
+		countryMapSer=(HashMap<String,String>)ois.readObject();
+		
 		BufferedReader inputReader=new BufferedReader(new FileReader(new File("outputs/countries")));
 		//List<String> countriesList=new ArrayList<String>();
 		HashMap<String, Country> countryMap = new HashMap<String, Country>();
@@ -96,27 +103,32 @@ public class CountriesSerializer {
 			{
 				String key=countryKeysIterator.next();
 				Country country=countryMap.get(key);
+				String countryKey=countryMapSer.get(country.getName());
 				
-				ResultSet rs=userStatement.executeQuery("Select count(*) from user_schema join listens_to_schema1 on user_schema.user_id=listens_to_schema1.user_id where user_schema.country=\'"+country+"\'");
+				
+				ResultSet rs=userStatement.executeQuery("Select count(*) from user_schema join listens_to_schema1 on user_schema.user_id=listens_to_schema1.user_id where user_schema.country=\'"+countryKey+"\'");
 				rs.first();
 				int totalListeners=rs.getInt(1);
 				System.out.println(totalListeners);
 				country.setTotalListeners(totalListeners);
 				rs.close();
 				
-				ResultSet maleRs=userStatement.executeQuery("Select count(*) from user_schema join listens_to_schema1 on user_schema.user_id=listens_to_schema1.user_id where user_schema.country=\'"+country+"\' AND user_schema.gender=\'m\'");
+				ResultSet maleRs=userStatement.executeQuery("Select count(*) from user_schema join listens_to_schema1 on user_schema.user_id=listens_to_schema1.user_id where user_schema.country=\'"+countryKey+"\' AND user_schema.gender=\'m\'");
+				maleRs.first();
 				int maleListeners=maleRs.getInt(1);
 				System.out.println(maleListeners);
 				country.setMaleListeners(maleListeners);
 				maleRs.close();
 				
 				
-				ResultSet femaleRs=userStatement.executeQuery("Select count(*) from user_schema join listens_to_schema1 on user_schema.user_id=listens_to_schema1.user_id where user_schema.country=\'"+country+"\' AND user_schema.gender=\'f\'");
+				ResultSet femaleRs=userStatement.executeQuery("Select count(*) from user_schema join listens_to_schema1 on user_schema.user_id=listens_to_schema1.user_id where user_schema.country=\'"+countryKey+"\' AND user_schema.gender=\'f\'");
 				femaleRs.first();
 				int femaleListeners=femaleRs.getInt(1);
 				System.out.println(femaleListeners);
 				country.setFemaleListeners(femaleListeners);
 				femaleRs.close();
+				
+				country.setUnknownListeners(totalListeners-(maleListeners+femaleListeners));
 			
 				
 				
