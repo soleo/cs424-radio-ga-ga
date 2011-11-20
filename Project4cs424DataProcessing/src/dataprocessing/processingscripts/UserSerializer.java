@@ -21,7 +21,8 @@ public class UserSerializer {
 		try
 		{
 			String userName="root";
-			String password="tigger";
+			//String password="tigger";
+			String password="";
 			String url="jdbc:mysql://localhost/gaga?user="+userName+"&password="+password;
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			conn=DriverManager.getConnection(url);
@@ -44,7 +45,7 @@ public class UserSerializer {
 			}
 			
 			System.out.println(userMap.keySet().size());
-			ObjectOutputStream oos=new ObjectOutputStream(new FileOutputStream(new File("/home/vivek/projects/workspace/visproj4/project4/DataStore/userMap.ser")));
+			ObjectOutputStream oos=new ObjectOutputStream(new FileOutputStream(new File("../project4/DataStore/userMap.ser")));
 			oos.writeObject(userMap);
 			oos.close();
 		}
