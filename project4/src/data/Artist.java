@@ -2,6 +2,7 @@ package data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Artist implements Serializable{
 	
@@ -12,6 +13,50 @@ public class Artist implements Serializable{
 	int femaleListeners;
 	int unknownListeners;
 	
+	String birthDate;
+	String type;
+	String country;
+	String gender;
+	
+
+	
+	public String getBirthDate() {
+		return birthDate;
+	}
+	public void setBirthDate(String birthDate) {
+		this.birthDate = birthDate;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public String getCountry() {
+		return country;
+	}
+	public void setCountry(String country) {
+		this.country = country;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	
+	HashMap<String,Integer> ageGroupListeners=new HashMap<String,Integer>();
+	
+	
+	public void addGroupListeners(String key,int listenerCount)
+	{
+		ageGroupListeners.put(key, listenerCount);
+	}
+	
+	public int getGroupListenersByGroup(String key)
+	{
+		return ageGroupListeners.get(key);
+	}
 	
 	public int getUnknownListeners() {
 		return unknownListeners;
