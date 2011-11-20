@@ -1,6 +1,7 @@
 package project;
 
 import controlP5.*;
+import data.DataClass;
 import processing.core.*;
 
 
@@ -15,6 +16,7 @@ Map theMap;
 		Utils.globalProcessing.smooth();
 		Utils.controlP5 = new ControlP5(this);
 		theMenu = new Menu(200);	
+		DataClass d=new DataClass();
 	}
 	public void draw(){
 		theMenu.drawContent();
