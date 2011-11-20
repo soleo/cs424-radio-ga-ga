@@ -1,0 +1,5 @@
+select artist_schema.artist_id,artist_schema.artist_name,subartist.user_count from artist_schema, (select artist_id,count(listens_to_schema1.user_id) user_count from listens_to_schema1 group by listens_to_schema1.artist_id) as subartist where artist_schema.artist_id=subartist.artist_id");
+
+
+
+select artist_schema.artist_id,subartist.user_count from artist_schema, (select artist_id,count(listens_to_schema1.user_id) user_count from listens_to_schema1, (select user_id from user_schema where arg<= and age>= and country='' and gender='') as users where users.user_id=listens_to_schema1.user_id group by listens_to_schema1.artist_id) as subartist where artist_schema.artist_id=subartist.artist_id order by subartist.user_count desc limit 0,100;
