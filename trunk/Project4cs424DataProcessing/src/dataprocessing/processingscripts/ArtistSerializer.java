@@ -34,6 +34,7 @@ public class ArtistSerializer {
 			
 			//to load the artist id and artist name
 			ResultSet rs=userStatement.executeQuery("Select * from artist_schema");
+			
 			while(rs.next())
 			{
 				String artistId=rs.getString(1);
@@ -59,7 +60,7 @@ public class ArtistSerializer {
 				count++;
 				System.out.println(count);
 				String artistId = keysIterator.next();
-				System.out.println(artistId);
+				//System.out.println(artistId);
 				Artist artist=artistMap.get(artistId);
 				String artistKey=artist.getArtistId().replaceAll("\'", "\\\\'").replaceAll("/", "\\\\/");
 				
@@ -86,14 +87,8 @@ public class ArtistSerializer {
 
 				artist.setUnknownListeners(totalListeners-(maleListeners+femaleListeners));
 				//list of listeners
-				
-				ResultSet listeners=userStatement.executeQuery("Select user_schema.user_id from user_schema join listens_to_schema1 on user_schema.user_id=listens_to_schema1.user_id join artist_schema on listens_to_schema1.artist_id=artist_schema.artist_id where artist_schema.artist_id=\'"+artistKey+"\'");
-				while(listeners.next())
-				{
-					artist.addListener(listeners.getString(1));
-				}
-				listeners.close();
-				System.out.println(artist.getTotalListeners()+"\t"+artist.listListeners().size());
+						
+								
 				artistMap.put(artistId, artist);
 				
 				
