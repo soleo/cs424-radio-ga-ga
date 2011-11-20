@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -70,8 +71,14 @@ public class DataClass {
 		ois.close();		
 	}
 	
-	void loadConnection()
+	void loadConnection() throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException
 	{
+		String userName="";//enter username
+		String password="";//enter password
+		String url="jdbc:mysql://localhost/gaga?user="+userName+"&password="+password;
+		Class.forName("com.mysql.jdbc.Driver").newInstance();
+		conn=DriverManager.getConnection(url);
+		
 		
 	}
 	
