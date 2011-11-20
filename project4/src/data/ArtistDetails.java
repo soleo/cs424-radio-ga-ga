@@ -1,6 +1,8 @@
 package data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ArtistDetails implements Serializable{
 	
@@ -16,6 +18,11 @@ public class ArtistDetails implements Serializable{
 	String country;
 	String gender;
 	
+	int currentCount;
+	//shows top 10 countries in country\tcount format
+	ArrayList<String> topCountries=new ArrayList<String>();
+		
+	HashMap<String,Integer> ageGroupListeners=new HashMap<String,Integer>();
 	
 	public String getBirthDate() {
 		return birthDate;
@@ -40,14 +47,21 @@ public class ArtistDetails implements Serializable{
 	}
 	public void setGender(String gender) {
 		this.gender = gender;
-	}
+	}	
+	public void addGroupListeners(String key,int listenerCount)
+	{
+		ageGroupListeners.put(key, listenerCount);
+	}	
+	public int getGroupListenersByGroup(String key)
+	{
+		return ageGroupListeners.get(key);
+	}	
 	public int getUnknownListeners() {
 		return unknownListeners;
 	}
 	public void setUnknownListeners(int unknownListeners) {
 		this.unknownListeners = unknownListeners;
-	}
-	
+	}	
 	public String getArtistId() {
 		return artistId;
 	}
@@ -79,14 +93,21 @@ public class ArtistDetails implements Serializable{
 		this.femaleListeners = femaleListeners;
 	}
 	
+	public void setCurrentCount(int count)
+	{
+		currentCount=count;
+	}
+	public int getCurrentCount()
+	{
+		return currentCount;
+	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-
+	public void addTopCountry(String country)
+	{
+		topCountries.add(country);
+	}
+	public ArrayList<String> getTopCoutries()
+	{
+		return topCountries;
+	}
 }
