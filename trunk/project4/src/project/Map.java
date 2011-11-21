@@ -1,5 +1,6 @@
 package project;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import data.DataClass;
 
@@ -43,7 +44,8 @@ public class Map {
 		this.dataClass=d;
 	}
 	void drawContent(){
-		Utils.globalProcessing.background(0,42,192,190);
+		//Utils.globalProcessing.background(0,42,192,190);
+		Utils.globalProcessing.background(255);
 		myshape.disableStyle();
 		Utils.globalProcessing.fill(0);
 		Utils.globalProcessing.stroke(0);
@@ -60,7 +62,36 @@ public class Map {
 
 		    Utils.globalProcessing.fill(0,0,0,128);
 		    Utils.globalProcessing.rect(0,440, Utils.globalProcessing.getWidth() - 200,Utils.globalProcessing.getHeight() - 440);
-		    dataClass.getHourlyListenCount();
+		    int[] hourlyData=dataClass.getHourlyListenCount();
+		    int[] tempData=hourlyData;
+		    Arrays.sort(tempData);
+		    int minData=tempData[0];
+		    int maxData=tempData[tempData.length-1]+400;
+		    Utils.globalProcessing.fill(0,205,0,240);
+		    Utils.globalProcessing.stroke(25);
+		    Utils.globalProcessing.strokeWeight(1);
+		    
+		    
+		    Utils.globalProcessing.textSize(13);
+		    //Utils.globalProcessing.textAlign(Utils.globalProcessing.CENTER,Utils.globalProcessing.CENTER);
+		    Utils.globalProcessing.text("Number\nof\nlisteners",20,(450+720)/2);
+		    Utils.globalProcessing.fill(255);
+		    Utils.globalProcessing.rect(40, 450, 780, 320);
+		    Utils.globalProcessing.fill(0,205,0,240);
+		    Utils.globalProcessing.strokeWeight(2);
+		    Utils.globalProcessing.beginShape();
+		    Utils.globalProcessing.noFill();
+		    for(int i=0;i<hourlyData.length;i++)
+		    {
+		    	long count=hourlyData[i];
+		    	float pointY=Utils.globalProcessing.map(count,0,maxData,Utils.globalProcessing.getHeight()-45,455);
+		    	float pointX=Utils.globalProcessing.map(i, 0, hourlyData.length-1, 45, 795);
+		    	//Utils.globalProcessing.point(pointX,pointY);
+		    	Utils.globalProcessing.vertex(pointX,pointY);
+		    }
+		    Utils.globalProcessing.endShape();
+		    Utils.globalProcessing.fill(0,0,0,128);
+		    Utils.globalProcessing.strokeWeight(1);
 		  
 	}
 	void mouseClicked(){
