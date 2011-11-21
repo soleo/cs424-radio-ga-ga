@@ -1,9 +1,12 @@
 package project;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import data.DataClass;
 
+import processing.core.PGraphics;
 import processing.core.PShape;
 
 public class Map { 
@@ -12,14 +15,19 @@ public class Map {
 	PShape piece;
 	String[] data;
 	ArrayList<PShape> theStates;
+	ArrayList<String> isoCodeForShape;
 	int counter; 
 	int theX;
 	int theY;
 	DataClass dataClass;
+	int width = 824;
+	int height = 440;
+	BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB_PRE  );
 	
 	
 	public Map(){
 		theStates=new ArrayList<PShape>();
+		isoCodeForShape = new ArrayList<String>();
 		data = Utils.globalProcessing.loadStrings("country.tsv");
 		myshape = Utils.globalProcessing.loadShape("map.svg");
 		System.out.print(myshape.getChildCount());
@@ -32,10 +40,30 @@ public class Map {
 		    if(state!=null)
 		    {
 		    	theStates.add(state);	
+		    	isoCodeForShape.add(new String(isoCode));
 		    }
 		    
 		  }
 		//theStates = new PShape[238];
+		  PGraphics pg = Utils.globalProcessing.createGraphics(width, height, Utils.globalProcessing.JAVA2D);
+		  pg.beginDraw();
+		  for(int i=0;i<theStates.size();i++)
+			{
+				PShape currentShape=theStates.get(i);
+				pg.fill(i);//,i,i);
+				currentShape.disableStyle();
+				currentShape.scale(.3f,.3f);
+				pg.shape(currentShape);
+				currentShape.scale(3.333f,3.333f);
+			}
+		  pg.endDraw();
+		  Graphics2D g2d = img.createGraphics();
+		  g2d.drawImage((java.awt.Image)pg.image, 0, 0, width, height, Utils.globalProcessing);
+		  g2d.finalize();
+		  g2d.dispose();
+		  //File f = new File("myimage.png");
+		  //try{ImageIO.write(img, "png", f);}catch(Exception e){}
+
 		counter = 0;
 	}
 	
@@ -95,25 +123,13 @@ public class Map {
 		  
 	}
 	void mouseClicked(){
-		   theX = Utils.globalProcessing.getX();
-		   theY = Utils.globalProcessing.getY();
-		   System.out.println(theX + theY);
-//		   for (int j = 0; j < theStates.length; j++){
-//			   theStates[j].getParams();
-//				   System.out.println(theStates[j].getParams());
-//			   
-//		   }
-		   for(int i=0;i<theStates.size();i++)
-		   {
-			   PShape currentShape=theStates.get(i);
-			   //currentShape.contains(theX, theY);
-			   if(currentShape.X<=theX && currentShape.X>=theX+currentShape.width && currentShape.Y<=theY && currentShape.Y<=theY+currentShape.height)
-			   {
-				   currentShape.getParams();
-				   System.out.println("clicked");   
-			   }
-			   
-		   }
+		int mouseX = Utils.globalProcessing.mouseX, mouseY= Utils.globalProcessing.mouseY;
+		
+		//System.out.print("img " + (0xff & img.getRGB(mouseX, mouseY)) + " at " + mouseX + ","+ mouseY);
+		   
+		int state_number = (0xff & img.getRGB(mouseX, mouseY));
+		
+		//System.out.println(" " +isoCodeForShape.get(state_number));	
 	}
 }
 
