@@ -21,7 +21,11 @@ import java.util.Set;
 public class DataClass {
 	
 	//ArrayList<String> countries;
-	HashMap<String, Country> countries = new HashMap<String, Country>();
+	long maxListeners;
+	
+	HashMap<String,Country> countryCodeMap=new HashMap<String,Country>();
+	
+	HashMap<String, Country> countryMap = new HashMap<String, Country>();
 	Connection conn;
 	HashMap<String,ArtistDetails> artistMap=new HashMap<String,ArtistDetails>();
 	HashMap<String, User> userMap=new HashMap<String, User>();
@@ -40,12 +44,13 @@ public class DataClass {
 		{
 			loadSimilarArtist();
 			loadConnection();
-			loadCountries();
+			loadCountryMap();
+			loadCountryCodeMap();
 			loadArtists();
 			loadUsers();
 			loadGenders();
 			loadAgeGroups();
-			System.out.println(countries.keySet().size());
+			System.out.println(countryMap.keySet().size());
 		}
 		catch(Exception e)
 		{
@@ -53,6 +58,11 @@ public class DataClass {
 		}		
 	}
 	
+	void loadCountryCodeMap()
+	{
+		
+		
+	}
 	
 	void loadGenders()
 	{		
@@ -101,8 +111,8 @@ public class DataClass {
 	
 	void loadConnection() throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException
 	{
-		String userName="";//enter username
-		String password="";//enter password
+		String userName="root";//enter username
+		String password="tigger";//enter password
 		String url="jdbc:mysql://localhost/gaga?user="+userName+"&password="+password;
 		Class.forName("com.mysql.jdbc.Driver").newInstance();
 		conn=DriverManager.getConnection(url);
@@ -117,16 +127,16 @@ public class DataClass {
 		ois.close();		
 	}
 	
-	void loadCountries() throws IOException, ClassNotFoundException
+	void loadCountryMap() throws IOException, ClassNotFoundException
 	{
 		ObjectInputStream ois=new ObjectInputStream(new FileInputStream(new File("../DataStore/countries.ser")));
-		countries=(HashMap<String, data.Country>)ois.readObject();
+		countryMap=(HashMap<String, data.Country>)ois.readObject();
 		ois.close();
-		Set<String> countryKeys=countries.keySet();
+		Set<String> countryKeys=countryMap.keySet();
 		Iterator<String> countryIterator=countryKeys.iterator();
 		while(countryIterator.hasNext())
 		{
-			Country country=countries.get(countryIterator.next());
+			Country country=countryMap.get(countryIterator.next());
 			countriesStrList.add(country.getName());
 		}
 		Collections.sort(countriesStrList);
