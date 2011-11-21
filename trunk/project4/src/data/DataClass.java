@@ -28,11 +28,14 @@ public class DataClass {
 	
 	ArrayList<String> genderList=new ArrayList<String>();
 	ArrayList<String> ageGroups=new ArrayList<String>();
+	
+	HashMap<String, String> similarArtist = new HashMap<String, String>();
 		
 	public DataClass()
 	{
 		try
 		{
+			loadSimilarArtist();
 			loadConnection();
 			loadCountries();
 			loadArtists();
@@ -361,8 +364,24 @@ public class DataClass {
 		return artistList;
 	}
 	
+	/**
+	 * 
+	 * @param artistName : the name of the artist, all lowercase
+	 * @return returns a array of Strings, with the similar artists' name
+	 */
+	String[] getSimilarArtist(String artistName)
+	{
+		String[] sim = new String[0];
+		if(similarArtist.containsKey(artistName)) sim = similarArtist.get(artistName).split(";");
+		return sim;
+	}
 	
-	
-	
+	void loadSimilarArtist() throws IOException, ClassNotFoundException
+	{
+		String inputFile="../DataStore/similarArtist.ser";
+		ObjectInputStream ois=new ObjectInputStream(new FileInputStream(new File(inputFile)));
+		similarArtist=(HashMap<String, String>)ois.readObject();
+		ois.close();
+	}
 
 }
