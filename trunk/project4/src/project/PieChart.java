@@ -1,17 +1,13 @@
 package project;
 
-import org.gicentre.utils.io.*;
-import org.gicentre.utils.gui.*;
-import org.gicentre.utils.move.*;
-import org.gicentre.utils.multisketch.*;
-import org.gicentre.utils.stat.*;
-import org.gicentre.utils.*;
-import org.gicentre.utils.network.*;
-import org.gicentre.utils.spatial.*;
-import org.gicentre.utils.geom.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import org.gicentre.utils.gui.Tooltip;
+import org.gicentre.utils.spatial.Direction;
 
 import processing.core.PFont;
-import processing.core.*;
+import data.ArtistDetails;
 
 
 class PieChart_ {
@@ -32,6 +28,7 @@ class PieChart_ {
   float g_start = 0;
   int savedIndex = -1;
   float tipX,tipY;
+  ArrayList<ArtistDetails> artistDetails;
   Tooltip tooltip;
   processing.core.PApplet parent;
   //Color piesColor = {#000000, #FFFFFF};
@@ -71,7 +68,10 @@ class PieChart_ {
     		  		  parent.color(51,51,255), 
     		  		  parent.color(51,255,255), 
     		  		  parent.color(0,184,92), 
-    		  		  parent.color(204,51,51)};
+    		  		  parent.color(204,51,51),
+    		  		  parent.color(255,255,255),
+    		  		  parent.color(33,33,33),
+    		  		  parent.color(100,100,100)};
       pieColor = Colors;
     }
     
@@ -82,6 +82,8 @@ class PieChart_ {
       
     tooltip.draw(tipX+1,tipY+1);
   }
+  
+  
   
   void hide(){
 	  
@@ -231,8 +233,75 @@ class PieChart_ {
     tipY=parent.mouseY;
   }
   
-  void updatePieChart()
+  void updatePieChart(int index,ArrayList<ArtistDetails> details,int type)
   {
+	  ArtistDetails artist=details.get(index);
+	  if(type==0)
+	  {
+		  //male female
+		  float totalListeners=artist.getTotalListeners();
+		  float maleListeners=artist.getMaleListeners();
+		  float femaleListeners=artist.getFemaleListeners();
+		  float male=(maleListeners/totalListeners)*100;
+		  float female=(femaleListeners/totalListeners)*100;
+		  float unknownListeners=artist.getUnknownListeners();
+		  float unknown=unknownListeners/totalListeners*100;
+		  float[] pies={male,female,unknown};
+		  System.out.println(male+" "+female);
+		  loadData(pies);
+		  String captions[]={"Male","Female","Unknown"};
+		  setLegend(captions);
+	  }
+	  else if(type==1)
+	  {
+		  //age
+		  float group1=artist.getGroupListenersByGroup("13-18");
+		  float group3=artist.getGroupListenersByGroup("25-35");
+		  float group4=artist.getGroupListenersByGroup("36-45");
+		  float group5=artist.getGroupListenersByGroup("46-64");
+		  float group6=artist.getGroupListenersByGroup("65 and above");
+		  float group2=artist.getGroupListenersByGroup("19-24");
+		  float total=group1+group2+group3+group4+group5+group6;
+		  float g1=(group1/total)*100;
+		  float g2=(group2/total)*100;
+		  float g3=(group3/total)*100;
+		  float g4=(group4/total)*100;
+		  float g5=(group5/total)*100;
+		  float g6=(group6/total)*100;
+		  
+		  float[] pies={g1,g2,g3,g4,g5,g6};
+		  loadData(pies);
+		  System.out.println(Arrays.toString(pies));
+		  String[] captions={"13-18","19-24","25-35","36-45","46-64","65 and above"};
+		  setLegend(captions);
+		  
+	  }
+	  else if(type==2)
+	  {
+		  //country
+		  ArrayList<String>countries=artist.getTopCoutries();
+		  float pies[] = new float[countries.size()];
+		  String[] captions= new String[countries.size()];
+		  for(int i=0;i<countries.size();i++)
+		  {
+			  pies[i]=Float.parseFloat(countries.get(i).split("\t")[1].trim());
+			  captions[i]=countries.get(i).split("\t")[0].trim();
+		  }
+		  float total=0;
+		  for(int i=0;i<pies.length;i++)
+		  {
+			  total+=pies[i];
+		  }  
+		  
+		  for(int i=0;i<pies.length;i++)
+			 {
+			  pies[i]=(pies[i]/total)*100;
+			  }
+		  
+		  loadData(pies);
+		  setLegend(captions);
+	  }
+	  
     
   }
 }

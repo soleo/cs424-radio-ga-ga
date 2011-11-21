@@ -1,11 +1,12 @@
 package project;
 
-import controlP5.*;
+import java.util.ArrayList;
+
+import processing.core.PApplet;
+import controlP5.ControlEvent;
+import controlP5.ControlP5;
+import data.ArtistDetails;
 import data.DataClass;
-import processing.core.*;
-import project.Map;
-import project.Menu;
-import project.Utils;
 
 
 public class MainSketch extends PApplet {
@@ -27,6 +28,7 @@ int artist1_index,artist2_index;
 int artist1_age_index, artist1_gender_index, artist1_nation_index;
 int artist2_age_index, artist2_gender_index, artist2_nation_index;
 InfoBox tip1,tip2;
+static ArrayList<ArtistDetails> upToDateList;
 	
 	public void setup(){
 		
@@ -56,12 +58,12 @@ InfoBox tip1,tip2;
 		  
 		  initBool();
 		  String[] header1 = {"c1", "c2", "c3"};
-		  lt1 = new ListTable(this, Utils.controlP5, header1, 20,50, 1);
+		  lt1 = new ListTable(this, Utils.controlP5, header1, 20,50, 1,d);
 		  lt1.addRow(header1);
 		  lt1.addRow(header1);
 		  
 		  String[] header2 = {"ss1", "ss2", "ss3"};
-		  lt2 = new ListTable(this, Utils.controlP5, header2, 430,50, 2);
+		  lt2 = new ListTable(this, Utils.controlP5, header2, 430,50, 2,d);
 		  lt2.addRow(header2);
 		  lt2.addRow(header2);
 		  
@@ -116,28 +118,34 @@ InfoBox tip1,tip2;
 	  if(artist1_age_selected || artist1_gender_selected || artist1_nation_selected)
 	  {
 	    // update top artist list
-	    lt1.updateList();
+	    if(!artist1_age_selected)
+	    	artist1_age_index = 0;
+	    if(!artist1_gender_selected)
+	    	artist1_gender_index = 0;
+	    if(!artist1_nation_selected)
+	    	artist1_nation_index = 0;
+		  //lt1.updateList(artist1_age_index, artist1_gender_index, artist1_nation_index);
 	  }
 	  
 	  if(artist2_age_selected || artist2_gender_selected || artist2_nation_selected)
 	  {
 	    // update top artist list
-	    lt2.updateList();
+	    //lt2.updateList();
 	  }
 	  
 	  if(artist1_selected)
 	  {
 	    // update the user breakdown informaiton
-	    p1.updatePieChart();
-	    p2.updatePieChart();
-	    p3.updatePieChart();
+	    p1.updatePieChart(artist1_index,upToDateList,0);
+	    p2.updatePieChart(artist1_index,upToDateList,1);
+	    p3.updatePieChart(artist1_index,upToDateList,2);
 	  }
 	  
 	  if(artist2_selected)
 	  {
-	    p4.updatePieChart();
-	    p5.updatePieChart();
-	    p6.updatePieChart();
+	    //p4.updatePieChart(artist2_index);
+	    //p5.updatePieChart(artist2_index);
+	    //p6.updatePieChart(artist2_index);
 	  }
 	
 	}
@@ -266,17 +274,56 @@ InfoBox tip1,tip2;
 				    if(name.equals("ArtistList1") == true)
 				    {
 				      artist1_selected = true;
+				      artist1_index = (int)theEvent.group().value();
+				      upToDateList=ListTable.getArtistList();
 				      println("index of artist1:"+theEvent.group().value());
 				    }
 				    
 				    if(name.equals("ArtistList2") == true)
 				    {
 				      artist2_selected = true;
+				      artist2_index = (int)theEvent.group().value();
 				      println("index of artist2:"+theEvent.group().value());
 				    }
 				 }
 		  }
+	 
+
 	}
-		
+ 	public void submit1(int theValue) {
+ 		
+ 		try
+ 		{
+ 			println("a button event from buttonA: "+theValue);
+ 			  if(artist1_age_selected && artist1_gender_selected && artist1_nation_selected)
+ 			  {
+ 			    // update top artist list
+ 				lt1.updateList(artist1_age_index, artist1_gender_index, artist1_nation_index);
+ 				
+ 			  }
+
+ 		}
+ 		catch (Exception e)
+ 		{
+ 			e.printStackTrace();
+ 		}
+	}
+ 	public void submit2(int theValue) {
+ 		
+ 		try
+ 		{
+ 			println("a button event from buttonA: "+theValue);
+ 			  if(artist2_age_selected && artist2_gender_selected && artist2_nation_selected)
+ 			  {
+ 			    // update top artist list
+ 				lt1.updateList(artist2_age_index, artist2_gender_index, artist2_nation_index);
+ 			  }
+
+ 		}
+ 		catch (Exception e)
+ 		{
+ 			e.printStackTrace();
+ 		}
+	}	
 
 }

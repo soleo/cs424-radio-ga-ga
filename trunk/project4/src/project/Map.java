@@ -71,7 +71,7 @@ public class Map {
 		counter = 0;
 	}
 	
-	void setDataClass(DataClass d)
+	public void setDataClass(DataClass d)
 	{
 		this.dataClass=d;
 	}
