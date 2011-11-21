@@ -36,7 +36,9 @@ public class DataClass {
 	ArrayList<String> ageGroups=new ArrayList<String>();
 	
 	HashMap<String, String> similarArtist = new HashMap<String, String>();
-		
+	
+	int[] hourlyListenCount = {732066, 587913, 471951, 382781, 319063, 284651, 289368, 329384, 414420, 540122, 684994, 806465, 874527, 944086, 1016169, 1054434, 1069057, 1064072, 1059258, 1062602, 1071687, 1069503, 1014440, 894799};
+	
 	ArrayList<ArtistDetails> topArtistAllTime=new ArrayList<ArtistDetails>();
 	public DataClass()
 	{
@@ -429,6 +431,11 @@ public class DataClass {
 		ObjectInputStream ois=new ObjectInputStream(new FileInputStream(new File(inputFile)));
 		similarArtist=(HashMap<String, String>)ois.readObject();
 		ois.close();
+	}
+	
+	int[] getHourlyListenCount()
+	{
+		return this.hourlyListenCount;
 	}
 
 }
