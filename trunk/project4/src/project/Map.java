@@ -1,8 +1,11 @@
 package project;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import javax.imageio.ImageIO;
 
 import data.DataClass;
 
@@ -47,10 +50,11 @@ public class Map {
 		//theStates = new PShape[238];
 		  PGraphics pg = Utils.globalProcessing.createGraphics(width, height, Utils.globalProcessing.JAVA2D);
 		  pg.beginDraw();
+		  pg.background(0);
 		  for(int i=0;i<theStates.size();i++)
 			{
 				PShape currentShape=theStates.get(i);
-				pg.fill(i);//,i,i);
+				pg.fill(i+1);//,i,i);
 				currentShape.disableStyle();
 				currentShape.scale(.3f,.3f);
 				pg.shape(currentShape);
@@ -61,8 +65,8 @@ public class Map {
 		  g2d.drawImage((java.awt.Image)pg.image, 0, 0, width, height, Utils.globalProcessing);
 		  g2d.finalize();
 		  g2d.dispose();
-		  //File f = new File("myimage.png");
-		  //try{ImageIO.write(img, "png", f);}catch(Exception e){}
+		  File f = new File("myimage.png");
+		  try{ImageIO.write(img, "png", f);}catch(Exception e){}
 
 		counter = 0;
 	}
@@ -125,11 +129,11 @@ public class Map {
 	void mouseClicked(){
 		int mouseX = Utils.globalProcessing.mouseX, mouseY= Utils.globalProcessing.mouseY;
 		
-		//System.out.print("img " + (0xff & img.getRGB(mouseX, mouseY)) + " at " + mouseX + ","+ mouseY);
+		System.out.print("img " + (0xff & img.getRGB(mouseX, mouseY)) + " at " + mouseX + ","+ mouseY);
 		   
-		int state_number = (0xff & img.getRGB(mouseX, mouseY));
+		int state_number = (0xff & img.getRGB(mouseX, mouseY)) - 1;
 		
-		//System.out.println(" " +isoCodeForShape.get(state_number));	
+		System.out.println(" " +isoCodeForShape.get(state_number));	
 	}
 }
 
