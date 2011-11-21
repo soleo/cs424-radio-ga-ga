@@ -103,27 +103,28 @@ public class ArtistSerializer {
 
 					artist.setUnknownListeners(totalListeners-(maleListeners+femaleListeners));
 					//age group
-					ResultSet ageGroup=userStatement.executeQuery("Select count(*) from user_schema , listens_to_schema1, artist_schema where user_schema.user_id=listens_to_schema1.user_id and artist_schema.artist_id = listens_to_schema1.artist_id and artist_schema.artist_id=\'"+artistKey+"\' and user_schema.age>=13 and user_schema.age<=18");
+					ResultSet ageGroup=userStatement.executeQuery("Select count(*) from user_schema join listens_to_schema1 on user_schema.user_id=listens_to_schema1.user_id join artist_schema on artist_schema.artist_id=listens_to_schema1.artist_id where artist_schema.artist_id=\'"+artistKey+"\' and user_schema.age>=13 and user_schema.age<=18");
 					ageGroup.first();
+					//System.out.println(ageGroup.getInt(1));
 					artist.addGroupListeners("13-18", ageGroup.getInt(1));
 					
-					ageGroup=userStatement.executeQuery("Select count(*) from user_schema , listens_to_schema1, artist_schema where user_schema.user_id=listens_to_schema1.user_id and artist_schema.artist_id = listens_to_schema1.artist_id and artist_schema.artist_id=\'"+artistKey+"\' and user_schema.age>=19 and user_schema.age<=24");
+					ageGroup=userStatement.executeQuery("Select count(*) from user_schema join listens_to_schema1 on user_schema.user_id=listens_to_schema1.user_id join artist_schema on artist_schema.artist_id=listens_to_schema1.artist_id where artist_schema.artist_id=\'"+artistKey+"\' and user_schema.age>=19 and user_schema.age<=24");
 					ageGroup.first();
 					artist.addGroupListeners("19-24", ageGroup.getInt(1));
 					
-					ageGroup=userStatement.executeQuery("Select count(*) from user_schema , listens_to_schema1, artist_schema where user_schema.user_id=listens_to_schema1.user_id and artist_schema.artist_id = listens_to_schema1.artist_id and artist_schema.artist_id=\'"+artistKey+"\' and user_schema.age>=25 and user_schema.age<=35");
+					ageGroup=userStatement.executeQuery("Select count(*) from user_schema join listens_to_schema1 on user_schema.user_id=listens_to_schema1.user_id join artist_schema on artist_schema.artist_id=listens_to_schema1.artist_id where artist_schema.artist_id=\'"+artistKey+"\' and user_schema.age>=25 and user_schema.age<=35");
 					ageGroup.first();
 					artist.addGroupListeners("25-35", ageGroup.getInt(1));
 					
-					ageGroup=userStatement.executeQuery("Select count(*) from user_schema , listens_to_schema1, artist_schema where user_schema.user_id=listens_to_schema1.user_id and artist_schema.artist_id = listens_to_schema1.artist_id and artist_schema.artist_id=\'"+artistKey+"\' and user_schema.age>=36 and user_schema.age<=45");
+					ageGroup=userStatement.executeQuery("Select count(*) from user_schema join listens_to_schema1 on user_schema.user_id=listens_to_schema1.user_id join artist_schema on artist_schema.artist_id=listens_to_schema1.artist_id where artist_schema.artist_id=\'"+artistKey+"\' and user_schema.age>=36 and user_schema.age<=45");
 					ageGroup.first();
 					artist.addGroupListeners("36-45", ageGroup.getInt(1));
 					
-					ageGroup=userStatement.executeQuery("Select count(*) from user_schema , listens_to_schema1, artist_schema where user_schema.user_id=listens_to_schema1.user_id and artist_schema.artist_id = listens_to_schema1.artist_id and artist_schema.artist_id=\'"+artistKey+"\' and user_schema.age>=46 and user_schema.age<=64");
+					ageGroup=userStatement.executeQuery("Select count(*) from user_schema join listens_to_schema1 on user_schema.user_id=listens_to_schema1.user_id join artist_schema on artist_schema.artist_id=listens_to_schema1.artist_id where artist_schema.artist_id=\'"+artistKey+"\' and user_schema.age>=46 and user_schema.age<=64");
 					ageGroup.first();
 					artist.addGroupListeners("46-64", ageGroup.getInt(1));
 					
-					ageGroup=userStatement.executeQuery("Select count(*) from user_schema , listens_to_schema1, artist_schema where user_schema.user_id=listens_to_schema1.user_id and artist_schema.artist_id = listens_to_schema1.artist_id and artist_schema.artist_id=\'"+artistKey+"\' and user_schema.age>=65");
+					ageGroup=userStatement.executeQuery("Select count(*) from user_schema join listens_to_schema1 on user_schema.user_id=listens_to_schema1.user_id join artist_schema on artist_schema.artist_id=listens_to_schema1.artist_id where artist_schema.artist_id=\'"+artistKey+"\' and user_schema.age>=65");
 					ageGroup.first();
 					artist.addGroupListeners("65 and above", ageGroup.getInt(1));
 														
