@@ -32,14 +32,18 @@ static ArrayList<ArtistDetails> upToDateList;
 	
 	public void setup(){
 		
+		
 		theMap=null;
 		Utils.globalProcessing = this;
 		Utils.globalProcessing.size(1024, 768);
 		Utils.globalProcessing.smooth();
 		Utils.controlP5 = new ControlP5(this);
+		
 		theMenu = new Menu(200);	
+		
 		d=new DataClass();
-		theMap = new Map();
+		System.out.println("setting up");
+		theMap = new Map(d);
 		theMap.setDataClass(d);
 		
 		setupComparisonView();
