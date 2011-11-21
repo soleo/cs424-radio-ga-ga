@@ -1,8 +1,10 @@
 package data;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.sql.Connection;
@@ -31,6 +33,7 @@ public class DataClass {
 	
 	HashMap<String, String> similarArtist = new HashMap<String, String>();
 		
+	ArrayList<ArtistDetails> topArtistAllTime=new ArrayList<ArtistDetails>();
 	public DataClass()
 	{
 		try
@@ -67,6 +70,28 @@ public class DataClass {
 		ageGroups.add("65 and above");
 	}
 	
+	void loadTopArtistsAllTime() throws IOException
+	{
+		BufferedReader inputReader=new BufferedReader(new FileReader(new File("../DataStore/topartist")));
+		while(inputReader.ready())
+		{
+			String inputLine=inputReader.readLine();
+			String inputLineParts[]=inputLine.split("|");
+			String artistId=inputLineParts[1].trim();
+			String count=inputLineParts[2].trim();
+			if(!count.equals(""))
+			{
+				ArtistDetails artist=artistMap.get(artistId);
+				artist.setCurrentCount(Integer.parseInt(count));
+				topArtistAllTime.add(artist);	
+			}
+			
+			
+		}
+		inputReader.close();
+	}
+	
+	
 	void loadUsers() throws FileNotFoundException, IOException, ClassNotFoundException
 	{
 		ObjectInputStream ois=new ObjectInputStream(new FileInputStream(new File("../DataStore/userMap.ser")));
@@ -76,7 +101,7 @@ public class DataClass {
 	
 	void loadConnection() throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException
 	{
-		String userName="root";//enter username
+		String userName="";//enter username
 		String password="";//enter password
 		String url="jdbc:mysql://localhost/gaga?user="+userName+"&password="+password;
 		Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -311,6 +336,10 @@ public class DataClass {
 		
 	}
 	
+	ArrayList<ArtistDetails> getTopArtistAllTime()
+	{
+		return topArtistAllTime;
+	}
 	
 	ArrayList<ArtistDetails> getTop100Artists(String gender,String ageGroup,String country)
 	{
@@ -319,14 +348,15 @@ public class DataClass {
 		
 			if(gender.trim().equals("")&& ageGroup.trim().equals("")&&country.trim().equals(""))
 			{
-				Statement s;				
-				s = conn.createStatement();				
-				ResultSet rs=s.executeQuery("select artist_id, count() from artist_schema, listens_to_schema1, user_schema where artist_schema.artist_id=listens_to_schema1.artist_id and user_schema.user_id=listens_to_schema1.user_id ");
-				while(rs.next())
-				{
-					String artistId=rs.getString(1);
-					
-				}
+//				Statement s;				
+//				s = conn.createStatement();				
+//				ResultSet rs=s.executeQuery("select artist_id, count() from artist_schema, listens_to_schema1, user_schema where artist_schema.artist_id=listens_to_schema1.artist_id and user_schema.user_id=listens_to_schema1.user_id ");
+//				while(rs.next())
+//				{
+//					String artistId=rs.getString(1);
+//					
+//				}
+				artistList=getTopArtistAllTime();
 			}
 			else if(!gender.trim().equals("") && country.trim().equals("")&& ageGroup.trim().equals(""))
 			{
