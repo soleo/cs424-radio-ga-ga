@@ -89,6 +89,16 @@ public class ArtistDataLoader {
 					artistDetails.addTopCountry("Others\t"+othersTotal);				
 					System.out.println(lineCount+"\t"+artistDetails.getTopCoutries().size());				
 					artistDetailsMap.put(key, artistDetails);
+					
+					HashMap<String,Integer> ageGroupMap=artist.getAgeGroupListeners();
+					Set<String> ageKeys=ageGroupMap.keySet();
+					Iterator<String> ageIterator=ageKeys.iterator();
+					while(ageIterator.hasNext())
+					{
+						String ageKey=ageIterator.next();
+						artistDetails.addGroupListeners(ageKey, ageGroupMap.get(ageKey));
+					}
+					
 				}
 				catch(SQLException e)
 				{
