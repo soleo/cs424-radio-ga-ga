@@ -131,9 +131,17 @@ public class Map {
 		
 		System.out.print("img " + (0xff & img.getRGB(mouseX, mouseY)) + " at " + mouseX + ","+ mouseY);
 		   
-		int state_number = (0xff & img.getRGB(mouseX, mouseY)) - 1;
-		
-		System.out.println(" " +isoCodeForShape.get(state_number));	
+		try {
+			int index = (0xff & img.getRGB(mouseX, mouseY)); // 0 is black, for unshaped map location
+			if(index > 0)
+			{
+				int state_number = index - 1;
+				System.out.println(" " +isoCodeForShape.get(state_number));	
+			}
+		}catch(IndexOutOfBoundsException outboundException)
+		{
+			System.out.println(outboundException.toString());
+		}
 	}
 }
 
