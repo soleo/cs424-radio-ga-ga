@@ -3,6 +3,8 @@ package data;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 public class ArtistDetails implements Serializable{
 	
@@ -54,6 +56,13 @@ public class ArtistDetails implements Serializable{
 	}	
 	public int getGroupListenersByGroup(String key)
 	{
+		Set<String> keys=ageGroupListeners.keySet();
+		Iterator<String> keysIterator=keys.iterator();
+		while(keysIterator.hasNext())
+		{
+			String currentKey=keysIterator.next();
+			System.out.println(currentKey+"\t"+ageGroupListeners.get(currentKey));
+		}
 		if(ageGroupListeners.containsKey(key))
 		{
 			System.out.println(ageGroupListeners.get(key) + " for " + key);
@@ -65,6 +74,8 @@ public class ArtistDetails implements Serializable{
 		}
 		
 	}	
+	
+	
 	public int getUnknownListeners() {
 		return unknownListeners;
 	}
