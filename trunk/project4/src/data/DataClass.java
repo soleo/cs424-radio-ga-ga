@@ -68,7 +68,7 @@ public class DataClass {
 				
 	}
 	
-	Country getCountryByCode(String code)
+	public Country getCountryByCode(String code)
 	{
 		return countryCodeMap.get(code);
 	}
@@ -152,17 +152,17 @@ public class DataClass {
 				
 	}
 	
-	ArrayList<String> getListOfCountries()
+	public ArrayList<String> getListOfCountries()
 	{
 		return countriesStrList;		
 	}
 	
-	ArrayList<String> getGenders()
+	public ArrayList<String> getGenders()
 	{		
 		return genderList;
 	}
 	
-	ArrayList<String> getAgeGroups()
+	public ArrayList<String> getAgeGroups()
 	{
 		return ageGroups;
 	}
@@ -217,7 +217,7 @@ public class DataClass {
 		return artistList;
 	}
 	
-	ArrayList<ArtistDetails> getTop100ArtistByCountry(String country) throws SQLException
+	public ArrayList<ArtistDetails> getTop100ArtistByCountry(String country) throws SQLException
 	{
 		ArrayList<ArtistDetails> artistList=new ArrayList<ArtistDetails>();
 		
@@ -236,7 +236,7 @@ public class DataClass {
 		
 	}
 	
-	ArrayList<ArtistDetails> getTop100ArtistByAgeGroupAndCountry(String ageGroup,String country) throws SQLException
+	public ArrayList<ArtistDetails> getTop100ArtistByAgeGroupAndCountry(String ageGroup,String country) throws SQLException
 	{
 		ArrayList<ArtistDetails> artistList=new ArrayList<ArtistDetails>();
 		int lowerLimit;
@@ -270,7 +270,7 @@ public class DataClass {
 		
 	}
 	
-	ArrayList<ArtistDetails> getTop100ArtistByAgeGroupAndGender(String ageGroup,String gender) throws SQLException
+	public ArrayList<ArtistDetails> getTop100ArtistByAgeGroupAndGender(String ageGroup,String gender) throws SQLException
 	{
 		ArrayList<ArtistDetails> artistList=new ArrayList<ArtistDetails>();
 		int lowerLimit;
@@ -303,7 +303,7 @@ public class DataClass {
 		return artistList;
 		
 	}
-	ArrayList<ArtistDetails> getTop100ArtistByGenderAndCountry(String gender,String country) throws SQLException
+	public ArrayList<ArtistDetails> getTop100ArtistByGenderAndCountry(String gender,String country) throws SQLException
 	{
 		ArrayList<ArtistDetails> artistList=new ArrayList<ArtistDetails>();
 		
@@ -321,7 +321,7 @@ public class DataClass {
 		return artistList;
 		
 	}
-	ArrayList<ArtistDetails> getTop100ArtistByGenderAndAgeGroupAndCountry(String gender,String ageGroup,String country) throws SQLException
+	public ArrayList<ArtistDetails> getTop100ArtistByGenderAndAgeGroupAndCountry(String gender,String ageGroup,String country) throws SQLException
 	{
 		ArrayList<ArtistDetails> artistList=new ArrayList<ArtistDetails>();
 		int lowerLimit;
@@ -355,12 +355,12 @@ public class DataClass {
 		
 	}
 	
-	ArrayList<ArtistDetails> getTopArtistAllTime()
+	public ArrayList<ArtistDetails> getTopArtistAllTime()
 	{
 		return topArtistAllTime;
 	}
 	
-	ArrayList<ArtistDetails> getTop100Artists(String gender,String ageGroup,String country)
+	public ArrayList<ArtistDetails> getTop100Artists(String gender,String ageGroup,String country)
 	{
 		ArrayList<ArtistDetails> artistList=null;
 		try {		
@@ -418,7 +418,7 @@ public class DataClass {
 	 * @param artistName : the name of the artist, all lowercase
 	 * @return returns a array of Strings, with the similar artists' name
 	 */
-	String[] getSimilarArtist(String artistName)
+	public String[] getSimilarArtist(String artistName)
 	{
 		String[] sim = new String[0];
 		if(similarArtist.containsKey(artistName)) sim = similarArtist.get(artistName).split(";");
@@ -433,7 +433,8 @@ public class DataClass {
 		ois.close();
 	}
 	
-	int[] getHourlyListenCount()
+	
+	public int[] getHourlyListenCount()
 	{
 		return this.hourlyListenCount;
 	}
