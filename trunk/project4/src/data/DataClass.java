@@ -70,7 +70,15 @@ public class DataClass {
 	
 	public Country getCountryByCode(String code)
 	{
-		return countryCodeMap.get(code);
+		if(countryCodeMap.containsKey(code))
+		{
+			return countryCodeMap.get(code);	
+		}
+		else
+		{
+			return null;
+		}
+		
 	}
 	
 	void loadGenders()
