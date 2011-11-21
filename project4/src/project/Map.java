@@ -1,23 +1,37 @@
 package project;
+import java.util.ArrayList;
+
 import processing.core.PShape;
-import processing.core.*;
 
 public class Map { 
 	
 	PShape myshape;
 	PShape piece;
 	String[] data;
-	PShape[] theStates;
+	ArrayList<PShape> theStates;
 	int counter; 
 	int theX;
 	int theY;
 	
 	
-	Map(){
+	public Map(){
+		theStates=new ArrayList<PShape>();
 		data = Utils.globalProcessing.loadStrings("country.tsv");
 		myshape = Utils.globalProcessing.loadShape("map.svg");
 		System.out.print(myshape.getChildCount());
-		theStates = new PShape[238];
+		int rowCount = data.length;
+		  for (int row = 0; row < rowCount; row++) {
+		    String abbrev = data[row];
+		    String abbrevParts[]=Utils.globalProcessing.split(abbrev,'\t');
+		    String isoCode=abbrevParts[0].trim().toLowerCase();
+		    PShape state = myshape.getChild(isoCode);
+		    if(state!=null)
+		    {
+		    	theStates.add(state);	
+		    }
+		    
+		  }
+		//theStates = new PShape[238];
 		counter = 0;
 	}
 	
@@ -28,34 +42,54 @@ public class Map {
 		Utils.globalProcessing.stroke(0);
 		//Utils.globalProcessing.shape(myshape);
 		//Utils.globalProcessing.stroke(0);
-		int rowCount = data.length;
-		  for (int row = 0; row < rowCount; row++) {
-		    String abbrev = data[row];
-		    String abbrevParts[]=Utils.globalProcessing.split(abbrev,'\t');
-		    String isoCode=abbrevParts[0].trim().toLowerCase();
-		    PShape state = myshape.getChild(isoCode);
-		    if (state!= null) {
-		    		theStates[counter] = state;
-		    		Utils.globalProcessing.fill(0,205,0,240);
-			        myshape.disableStyle();
-			        state.scale(.3f,.3f);
-			        System.out.println(theStates[counter].getName());
-			        Utils.globalProcessing.shape(state);
-			        counter++;
-		    }       
-		    System.out.print(counter);
+//		int rowCount = data.length;
+//		  for (int row = 0; row < rowCount; row++) {
+//		    String abbrev = data[row];
+//		    String abbrevParts[]=Utils.globalProcessing.split(abbrev,'\t');
+//		    String isoCode=abbrevParts[0].trim().toLowerCase();
+//		    PShape state = myshape.getChild(isoCode);
+//		    if (state!= null) {
+//		    		theStates[counter] = state;
+//		    		Utils.globalProcessing.fill(0,205,0,240);
+//			        myshape.disableStyle();
+//			        state.scale(.3f,.3f);
+//			        System.out.println(theStates[counter].getName());
+//			        Utils.globalProcessing.shape(state);
+//			        counter++;
+//		    }       
+		    //System.out.print(counter);
+		
+			for(int i=0;i<theStates.size();i++)
+			{
+				PShape currentShape=theStates.get(i);
+				Utils.globalProcessing.fill(0,205,0,240);
+				currentShape.disableStyle();
+				currentShape.scale(.3f,.3f);
+				Utils.globalProcessing.shape(currentShape);
+			}
 
 		    Utils.globalProcessing.fill(0,0,0,128);
 		    Utils.globalProcessing.rect(0,440, Utils.globalProcessing.getWidth() - 200,Utils.globalProcessing.getHeight() - 440);
-		  }
+		  
 	}
 	void mouseClicked(){
 		   theX = Utils.globalProcessing.getX();
 		   theY = Utils.globalProcessing.getY();
 		   System.out.println(theX + theY);
-		   for (int j = 0; j < theStates.length; j++){
-			   theStates[j].getParams();
-				   System.out.println(theStates[j].getParams());
+//		   for (int j = 0; j < theStates.length; j++){
+//			   theStates[j].getParams();
+//				   System.out.println(theStates[j].getParams());
+//			   
+//		   }
+		   for(int i=0;i<theStates.size();i++)
+		   {
+			   PShape currentShape=theStates.get(i);
+			   //currentShape.contains(theX, theY);
+			   if(currentShape.X<=theX && currentShape.X>=theX+currentShape.width && currentShape.Y<=theY && currentShape.Y<=theY+currentShape.height)
+			   {
+				   currentShape.getParams();
+				   System.out.println("clicked");   
+			   }
 			   
 		   }
 	}

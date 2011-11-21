@@ -14,12 +14,15 @@ Boolean mapClickable = false;
 
 	
 	public void setup(){
+		
+		theMap=null;
 		Utils.globalProcessing = this;
 		Utils.globalProcessing.size(1024, 768);
 		Utils.globalProcessing.smooth();
 		Utils.controlP5 = new ControlP5(this);
 		theMenu = new Menu(200);	
 		DataClass d=new DataClass();
+		theMap = new Map();
 	}
 	public void draw(){
 		theMenu.drawContent();
@@ -37,9 +40,17 @@ Boolean mapClickable = false;
 		 
 		 if(theEvent.controller().name().equals("Map View")){
 			System.out.print("yay");
-			 theMap = new Map();
-			 theMap.drawContent();
-			 mapOpened = true;
+			try
+			{
+				
+				 theMap.drawContent();
+				 mapOpened = true;	
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+			 
 		 }
 	}
 		
