@@ -66,6 +66,7 @@ public class Map {
 				currentShape.disableStyle();
 				currentShape.scale(.3f,.3f);
 				Utils.globalProcessing.shape(currentShape);
+				currentShape.scale(3.333f,3.333f);
 			}
 
 		    Utils.globalProcessing.fill(0,0,0,128);
