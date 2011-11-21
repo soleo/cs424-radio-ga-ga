@@ -39,7 +39,7 @@ public class DataClass {
 	
 	int[] hourlyListenCount = {732066, 587913, 471951, 382781, 319063, 284651, 289368, 329384, 414420, 540122, 684994, 806465, 874527, 944086, 1016169, 1054434, 1069057, 1064072, 1059258, 1062602, 1071687, 1069503, 1014440, 894799};
 	
-	ArrayList<ArtistDetails> topArtistAllTime=new ArrayList<ArtistDetails>();
+	static ArrayList<ArtistDetails> topArtistAllTime=new ArrayList<ArtistDetails>();
 	public DataClass()
 	{
 		try
@@ -49,7 +49,9 @@ public class DataClass {
 			loadCountryMap();
 			loadCountryCodeMap();
 			computeMaxListeners();
+			
 			loadArtists();
+			loadTopArtistsAllTime();
 			loadUsers();
 			loadGenders();
 			loadAgeGroups();
@@ -130,14 +132,20 @@ public class DataClass {
 		while(inputReader.ready())
 		{
 			String inputLine=inputReader.readLine();
-			String inputLineParts[]=inputLine.split("|");
-			String artistId=inputLineParts[1].trim();
-			String count=inputLineParts[2].trim();
+			String inputLineParts[]=inputLine.trim().split(" ");
+			String artistId=inputLineParts[0].trim();
+			String count=inputLineParts[1].trim();
+			
 			if(!count.equals(""))
 			{
-				ArtistDetails artist=artistMap.get(artistId);
-				artist.setCurrentCount(Integer.parseInt(count));
-				topArtistAllTime.add(artist);	
+				if(artistMap.containsKey(artistId))
+				{
+					System.out.println(artistId+"\t"+count);
+					ArtistDetails artist=artistMap.get(artistId);
+					artist.setCurrentCount(Integer.parseInt(count));
+					topArtistAllTime.add(artist);	
+				}
+					
 			}
 			
 			
@@ -155,9 +163,9 @@ public class DataClass {
 	
 	void loadConnection() throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException
 	{
-		String userName="root";//enter username
-		String password="tigger";//enter password
-		String url="jdbc:mysql://localhost/gaga?user="+userName+"&password="+password;
+		String userName="soleo";//enter username
+		String password="123456";//enter password
+		String url="jdbc:mysql://192.168.142.147/gaga?user="+userName+"&password="+password;
 		Class.forName("com.mysql.jdbc.Driver").newInstance();
 		conn=DriverManager.getConnection(url);
 		
@@ -207,7 +215,7 @@ public class DataClass {
 		ArrayList<ArtistDetails> artistList=new ArrayList<ArtistDetails>();
 		
 		Statement statement=conn.createStatement();
-		ResultSet result=statement.executeQuery("select artist_schema.artist_id,subartist.user_count from artist_schema, (select artist_id,count(listens_to_schema1.user_id) user_count from listens_to_schema1, (select user_id from user_schema where user_schema.gender=\'"+gender.toLowerCase()+"\') as users where users.user_id=listens_to_schema1.user_id group by listens_to_schema1.artist_id) as subartist where artist_schema.artist_id=subartist.artist_id order by subartist.user_count desc limit 0,100");
+		ResultSet result=statement.executeQuery("select artist_schema.artist_id,subartist.user_count from artist_schema, (select artist_id,count(listens_to_schema1.user_id) user_count from listens_to_schema1, (select user_id from user_schema where user_schema.gender=\'"+gender.toLowerCase()+"\') as users where users.user_id=listens_to_schema1.user_id group by listens_to_schema1.artist_id) as subartist where artist_schema.artist_id=subartist.artist_id order by subartist.user_count desc limit 0,10");
 		while(result.next())
 		{
 			String artistId=result.getString(1);

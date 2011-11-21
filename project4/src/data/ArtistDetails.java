@@ -54,7 +54,16 @@ public class ArtistDetails implements Serializable{
 	}	
 	public int getGroupListenersByGroup(String key)
 	{
-		return ageGroupListeners.get(key);
+		if(ageGroupListeners.containsKey(key))
+		{
+			System.out.println(ageGroupListeners.get(key) + " for " + key);
+			return (int)ageGroupListeners.get(key);	
+		}
+		else
+		{
+			return 0;
+		}
+		
 	}	
 	public int getUnknownListeners() {
 		return unknownListeners;

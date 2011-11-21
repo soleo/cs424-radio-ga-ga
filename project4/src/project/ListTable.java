@@ -10,6 +10,8 @@ import controlP5.ControlGroup;
 import controlP5.ControlP5;
 import controlP5.DropdownList;
 import controlP5.ListBox;
+import data.ArtistDetails;
+import data.DataClass;
 
 public class ListTable {
   int                 cellHeight      = 30;
@@ -26,9 +28,13 @@ public class ListTable {
   int flag;
   public DropdownList p1, p2, p3;
   public ListBox l;
+  public controlP5.Button s;
+  DataClass dataClass;
+  static ArrayList<ArtistDetails> artistDetails;
   
-  ListTable(processing.core.PApplet p, ControlP5 ui, String[] header, int x, int y, int flag) {
+  ListTable(processing.core.PApplet p, ControlP5 ui, String[] header, int x, int y, int flag,DataClass d) {
     this.parent = p;
+    dataClass=d;
     content     = new ArrayList<String[]>();
     content.add(header);
     lx = x;
@@ -122,6 +128,7 @@ public class ListTable {
 	  p2.hide();
 	  p3.hide();
 	  l.hide();
+	  s.hide();
   }
   public void setupUi() {
     ui.setControlFont(new ControlFont(parent.createFont("Arial", 13), 13));
@@ -133,9 +140,10 @@ public class ListTable {
     p1.addItem("ALL", 0);
     p1.addItem("13-18",1);
     p1.addItem("19-24",2);
-    p1.addItem("36-45",3);
-    p1.addItem("40-64",4);
-    p1.addItem("above 65", 5);
+    p1.addItem("25-35",3);
+    p1.addItem("36-45",4);
+    p1.addItem("46-64",5);
+    p1.addItem("above 65", 6);
     p1.setItemHeight(18);
     customize(p1);
     
@@ -151,11 +159,28 @@ public class ListTable {
     p3 = ui.addDropdownList("nationality"+flag, lx+240, ly, 110, 50);
     p3.captionLabel().set("nationality");
     //p3.setGroup("nationality"+flag);
+    ArrayList<String>countryNames=dataClass.getListOfCountries();
     p3.addItem("ALL", 0);
-    p3.addItem("Male",1);
-    p3.addItem("Female", 2);
+    for(int i=0;i<countryNames.size();i++)
+    {
+    	if(countryNames.get(i).length()>14)
+    	{
+    		p3.addItem(countryNames.get(i).substring(0, 14),i+1);	
+    	}
+    	else
+    	{
+    		p3.addItem(countryNames.get(i),i+1);
+    	}
+    	
+    }
+    
+//    p3.addItem("Male",1);
+//    p3.addItem("Female", 2);
     p3.setItemHeight(18);
     customize(p3);
+    s = ui.addButton("submit"+flag, flag, lx+350, ly, 10, 10);
+    s.setCaptionLabel("Go");
+    s.hide();
     
     l = ui.addListBox("ArtistList"+flag,lx,ly+64,360,120);
     //l.setGroup("ArtistList"+flag);
@@ -169,8 +194,15 @@ public class ListTable {
     l.valueLabel().style().marginTop = 3; // the +/- sign
     //l.setBackgroundColor(color(100,0,0));
     
-    for(int i=0;i<100;i++) {
-      l.addItem("artist name "+i+"\tCount:"+(100-i),i);
+     artistDetails=dataClass.getTopArtistAllTime();
+//    for(int i=0;i<100;i++) {
+//      l.addItem("artist name "+i+"\tCount:"+(100-i),i);
+//    }
+    System.out.println(artistDetails.size());
+    for(int i=0;i<artistDetails.size();i++)
+    {
+    	System.out.println(artistDetails.get(i).getArtistId());
+    	l.addItem(artistDetails.get(i).getArtistName()+"     "+artistDetails.get(i).getCurrentCount(), i);
     }
     l.setColorBackground(parent.color(255,128));
     l.setColorActive(parent.color(0,0,255,128));
@@ -188,9 +220,82 @@ public class ListTable {
     cgrp.setColorActive(parent.color(255, 128));
   }
   
-  void updateList()
+  void updateList(int age_index, int gender_index, int nation_index)
   {
+	String country="";
+	if(nation_index==0)
+	{
+		country="";
+	}
+	else
+	{
+		ArrayList<String>countryNames=dataClass.getListOfCountries();
+		country = countryNames.get(nation_index-1);
+	}
+	String gender="";
+	if(gender_index==0)
+	{
+		gender="";
+	}
+	else if(gender_index==1)
+	{
+		gender="m";
+	}
+	else if(gender_index==2)
+	{
+		gender="f";
+	}
+	
+	String ageGroup = "";
+	
+	if(age_index==0)
+	{
+		ageGroup="";
+	}
+	else if(age_index==1)
+	{
+		ageGroup="13-18";
+	}
+	else if(age_index==2)
+	{
+		ageGroup="19-24";
+	}
+	else if(age_index==3)
+	{
+		ageGroup="25-35";
+	}
+	else if(age_index==4)
+	{
+		ageGroup="36-45";
+	}
+	else if(age_index==5)
+	{
+		ageGroup="46-64";
+	}
+	else if(age_index==6)
+	{
+		ageGroup="above 65";
+	}
+	
+     artistDetails=dataClass.getTop100Artists(gender, ageGroup, country);
+    l.clear();
+    if(artistDetails!=null)
+    {
+    	for(int i=0; i<artistDetails.size();i++)
+        {
+        	l.addItem(artistDetails.get(i).getArtistName()+"\t"+artistDetails.get(i).getCurrentCount(),i);
+        }	
+    }
+    else
+    {
+    	l.addItem("No artists found", 0);
+    }
     
+  }
+  
+  public static ArrayList<ArtistDetails> getArtistList()
+  {
+	  return artistDetails;
   }
   
   public void show(){
@@ -198,5 +303,6 @@ public class ListTable {
 	  p2.show();
 	  p3.show();
 	  l.show();
+	  s.show();
   }
 }
