@@ -48,6 +48,7 @@ public class DataClass {
 			loadConnection();
 			loadCountryMap();
 			loadCountryCodeMap();
+			computeMaxListeners();
 			loadArtists();
 			loadUsers();
 			loadGenders();
@@ -60,6 +61,32 @@ public class DataClass {
 		}		
 	}
 	
+	public long getMaxListeners()
+	{
+		return maxListeners;
+	}
+	
+	void computeMaxListeners()
+	{
+		Set<String> countryCodes=countryCodeMap.keySet();
+		Iterator<String> countryCodesIterator=countryCodes.iterator();
+		long maxListeners=0;
+		while(countryCodesIterator.hasNext())
+		{
+			String code=countryCodesIterator.next();
+			if(maxListeners<=countryCodeMap.get(code).getTotalListeners())
+			{
+				maxListeners=countryCodeMap.get(code).getTotalListeners();
+			}
+			
+		}
+		this.maxListeners=maxListeners;
+	}
+	
+	public boolean isCountryCodePresent(String countryCode)
+	{
+		return countryCodeMap.containsKey(countryCode);
+	}
 	void loadCountryCodeMap() throws FileNotFoundException, IOException, ClassNotFoundException
 	{
 		ObjectInputStream ois=new ObjectInputStream(new FileInputStream(new File("../DataStore/countriesCodeMap.ser")));
