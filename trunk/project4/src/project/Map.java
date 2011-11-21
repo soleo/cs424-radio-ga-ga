@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
+import data.Country;
 import data.DataClass;
 
 import processing.core.PGraphics;
@@ -28,7 +29,8 @@ public class Map {
 	BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB_PRE  );
 	
 	
-	public Map(){
+	public Map(DataClass d){
+		dataClass=d;
 		theStates=new ArrayList<PShape>();
 		isoCodeForShape = new ArrayList<String>();
 		data = Utils.globalProcessing.loadStrings("country.tsv");
@@ -81,11 +83,30 @@ public class Map {
 		myshape.disableStyle();
 		Utils.globalProcessing.fill(0);
 		Utils.globalProcessing.stroke(0);
+		long maxListeners=dataClass.getMaxListeners();
 		
 			for(int i=0;i<theStates.size();i++)
 			{
 				PShape currentShape=theStates.get(i);
-				Utils.globalProcessing.fill(0,205,0,240);
+				//Utils.globalProcessing.fill(0,205,0,240);
+				float scaledColorValue;
+				if(dataClass.isCountryCodePresent(currentShape.getName()))
+				{
+					Country currentCountry=dataClass.getCountryByCode(currentShape.getName());
+					long listeners=currentCountry.getTotalListeners();
+					
+					//scaledColorValue=Utils.globalProcessing.map(listeners,0,maxListeners,255,100);
+					float normalizedListeners=Utils.globalProcessing.norm(listeners,0,255);
+					
+					scaledColorValue=Utils.globalProcessing.lerpColor( 0xF62817,0x000000 , listeners);
+					System.out.println(scaledColorValue);
+					
+				}
+				else
+				{
+					scaledColorValue=0;
+				}
+				Utils.globalProcessing.fill(scaledColorValue);
 				currentShape.disableStyle();
 				currentShape.scale(.3f,.3f);
 				Utils.globalProcessing.shape(currentShape);
@@ -129,19 +150,24 @@ public class Map {
 	void mouseClicked(){
 		int mouseX = Utils.globalProcessing.mouseX, mouseY= Utils.globalProcessing.mouseY;
 		
-		System.out.print("img " + (0xff & img.getRGB(mouseX, mouseY)) + " at " + mouseX + ","+ mouseY);
-		   
-		try {
-			int index = (0xff & img.getRGB(mouseX, mouseY)); // 0 is black, for unshaped map location
-			if(index > 0)
-			{
-				int state_number = index - 1;
-				System.out.println(" " +isoCodeForShape.get(state_number));	
-			}
-		}catch(IndexOutOfBoundsException outboundException)
+		if(mouseX<=824 && mouseY<=440)
 		{
-			System.out.println(outboundException.toString());
+			
+			System.out.print("img " + (0xff & img.getRGB(mouseX, mouseY)) + " at " + mouseX + ","+ mouseY+"\n");
+			   
+			try {
+				int index = (0xff & img.getRGB(mouseX, mouseY)); // 0 is black, for unshaped map location
+				if(index > 0)
+				{
+					int state_number = index - 1;
+					System.out.println(" " +isoCodeForShape.get(state_number));	
+				}
+			}catch(IndexOutOfBoundsException outboundException)
+			{
+				System.out.println(outboundException.toString());
+			}	
 		}
+		
 	}
 }
 
