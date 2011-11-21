@@ -176,6 +176,16 @@ InfoBox tip1,tip2;
 			}
 			mapClickable = true;
 		}
+		if(comparisonViewSelected){
+			
+			p1.mouseClicked();
+			p2.mouseClicked();
+			p3.mouseClicked();
+			p4.mouseClicked();
+			p5.mouseClicked();
+			p6.mouseClicked();
+		}
+		
 	}
 	public void controlEvent(ControlEvent theEvent) {
 		 if(theEvent.isController()){
@@ -204,7 +214,7 @@ InfoBox tip1,tip2;
 		 }
 		 
 		 
-		// if(comparisonViewSelected){
+	 if(comparisonViewSelected){
 	   	if(theEvent.isGroup())
 				 {
 				    String name = theEvent.group().name();
@@ -265,8 +275,8 @@ InfoBox tip1,tip2;
 				      println("index of artist2:"+theEvent.group().value());
 				    }
 				 }
-		   //}
+		  }
 	}
 		
-	
+
 }
