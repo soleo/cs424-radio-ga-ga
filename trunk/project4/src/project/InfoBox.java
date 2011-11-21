@@ -30,12 +30,10 @@ class InfoBox
     tooltip.setBackgroundColour(c);
     tooltip.setTextColour(255);
     tooltip.setText("Artist Information\n"+
-                    "Birthday: unknown\n"+
-                    "Shape: unknown\n"+
-                    "Location: unknown\n"+
-                    "State: unknown\n"+
-                    "Summary\n"+ 
-                    "unknown");
+                    "BirthDate: unknown\n"+
+                    "Country: unknown\n"+
+                    "Gender: unknown\n"+
+                    "Similar Artist: unknown\n");
   }
 
   
@@ -47,21 +45,22 @@ class InfoBox
   public void updateInfo(String DetailedMessage)
   {
     tooltip.setText(DetailedMessage);
+    tooltip.setIsActive(true);
   }
   
   public void mouseClicked()
   {
-    //println(mouseX+" "+mouseY);
-    
-    // get a list of postions on current map, and find the nearest sighting and show the detailed information on map.
-   
-    tooltip.setIsActive(true);
-    
-    // click on the box area to close the box
-    if (parent.mouseX>30 && parent.mouseY>600 && parent.mouseX<430 && parent.mouseY<680)
-    {
-      tooltip.setIsActive(false);
-    }
+//    parent.println(parent.mouseX+" "+parent.mouseY+" "+tooltip.getWidth()+" "+tooltip.getHeight());
+//    
+//    // get a list of postions on current map, and find the nearest sighting and show the detailed information on map.
+//   
+//    //tooltip.setIsActive(true);
+//    
+//    // click on the box area to close the box
+//    if (parent.mouseX>curX && parent.mouseY>curY && parent.mouseX<curX+tooltip.getWidth() && parent.mouseY<curY+tooltip.getHeight())
+//    {
+//      tooltip.setIsActive(false);
+//    }
   }
 
   

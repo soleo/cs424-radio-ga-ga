@@ -178,7 +178,7 @@ public class ListTable {
 //    p3.addItem("Female", 2);
     p3.setItemHeight(18);
     customize(p3);
-    s = ui.addButton("submit"+flag, flag, lx+350, ly, 10, 10);
+    s = ui.addButton("submit"+flag, flag, lx+355, ly-18, 25, 18);
     s.setCaptionLabel("Go");
     s.hide();
     
@@ -277,7 +277,7 @@ public class ListTable {
 		ageGroup="above 65";
 	}
 	
-     artistDetails=dataClass.getTop100Artists(gender, ageGroup, country);
+    artistDetails=dataClass.getTop100Artists(gender, ageGroup, country);
     l.clear();
     if(artistDetails!=null)
     {
