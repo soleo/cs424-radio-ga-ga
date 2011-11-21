@@ -58,10 +58,17 @@ public class DataClass {
 		}		
 	}
 	
-	void loadCountryCodeMap()
+	void loadCountryCodeMap() throws FileNotFoundException, IOException, ClassNotFoundException
 	{
-		
-		
+		ObjectInputStream ois=new ObjectInputStream(new FileInputStream(new File("../DataStore/countryCodeMap.ser")));
+		countryCodeMap=(HashMap<String, Country>) ois.readObject();
+		ois.close();
+				
+	}
+	
+	Country getCountryByCode(String code)
+	{
+		return countryCodeMap.get(code);
 	}
 	
 	void loadGenders()
