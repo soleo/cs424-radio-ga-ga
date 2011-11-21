@@ -165,9 +165,9 @@ public class DataClass {
 	
 	void loadConnection() throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException
 	{
-		String userName="root";//enter username
-		String password="tigger";//enter password
-		String url="jdbc:mysql://localhost/gaga?user="+userName+"&password="+password;
+		String userName="soleo";//enter username
+		String password="123456";//enter password
+		String url="jdbc:mysql://192.168.142.147/gaga?user="+userName+"&password="+password;
 		Class.forName("com.mysql.jdbc.Driver").newInstance();
 		conn=DriverManager.getConnection(url);
 		
@@ -466,7 +466,7 @@ public class DataClass {
 	public String[] getSimilarArtist(String artistName)
 	{
 		String[] sim = new String[0];
-		if(similarArtist.containsKey(artistName)) sim = similarArtist.get(artistName).split(";");
+		if(similarArtist.containsKey(artistName.toLowerCase())) sim = similarArtist.get(artistName.toLowerCase()).split(";");
 		return sim;
 	}
 	

@@ -1,6 +1,7 @@
 package project;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import processing.core.PApplet;
 import controlP5.ControlEvent;
@@ -28,7 +29,7 @@ int artist1_index,artist2_index;
 int artist1_age_index, artist1_gender_index, artist1_nation_index;
 int artist2_age_index, artist2_gender_index, artist2_nation_index;
 InfoBox tip1,tip2;
-static ArrayList<ArtistDetails> upToDateList;
+static ArrayList<ArtistDetails> upToDateList1,upToDateList2;
 	
 	public void setup(){
 		
@@ -55,9 +56,9 @@ static ArrayList<ArtistDetails> upToDateList;
 		  float[] data1 = {25,75};
 		  float[] data2 = {50,10,40};
 		  float[] data3 = {10,10,10,10,10,10,10,30};
-		  String[] l1 = {"Male", "Female"};
-		  String[] l2 = {"Male", "Female", "sdf"};
-		  String[] l3 = {"Male", "Female", "sdf","sd","asdf","asdf","asdf","asdf"};
+		  String[] l1 = {"Age13", "Age2"};
+		  String[] l2 = {"Male", "Female", "Unknown"};
+		  String[] l3 = {"AC", "SD", "DD","US","CH","TH","AS","NO"};
 
 		  
 		  initBool();
@@ -91,8 +92,8 @@ static ArrayList<ArtistDetails> upToDateList;
 		  p6.loadData(data3);
 		  p6.setLegend(l3);
 		  
-		  tip1 = new InfoBox(this,20,680);
-		  tip2 = new InfoBox(this,430,680);
+		  tip1 = new InfoBox(this,20,660);
+		  tip2 = new InfoBox(this,430,660);
 	}
 	void initBool()
 	{
@@ -119,37 +120,54 @@ static ArrayList<ArtistDetails> upToDateList;
 	}
 	void checkBool()
 	{
-	  if(artist1_age_selected || artist1_gender_selected || artist1_nation_selected)
-	  {
-	    // update top artist list
-	    if(!artist1_age_selected)
-	    	artist1_age_index = 0;
-	    if(!artist1_gender_selected)
-	    	artist1_gender_index = 0;
-	    if(!artist1_nation_selected)
-	    	artist1_nation_index = 0;
-		  //lt1.updateList(artist1_age_index, artist1_gender_index, artist1_nation_index);
-	  }
-	  
-	  if(artist2_age_selected || artist2_gender_selected || artist2_nation_selected)
-	  {
-	    // update top artist list
-	    //lt2.updateList();
-	  }
+//	  if(artist1_age_selected || artist1_gender_selected || artist1_nation_selected)
+//	  {
+//	    // update top artist list
+//	    if(!artist1_age_selected)
+//	    	artist1_age_index = 0;
+//	    if(!artist1_gender_selected)
+//	    	artist1_gender_index = 0;
+//	    if(!artist1_nation_selected)
+//	    	artist1_nation_index = 0;
+//		  //lt1.updateList(artist1_age_index, artist1_gender_index, artist1_nation_index);
+//	  }
+//	  
+//	  if(artist2_age_selected || artist2_gender_selected || artist2_nation_selected)
+//	  {
+//	    // update top artist list
+//	    //lt2.updateList();
+//	  }
 	  
 	  if(artist1_selected)
 	  {
 	    // update the user breakdown informaiton
-	    p1.updatePieChart(artist1_index,upToDateList,0);
-	    p2.updatePieChart(artist1_index,upToDateList,1);
-	    p3.updatePieChart(artist1_index,upToDateList,2);
+	    p1.updatePieChart(artist1_index,upToDateList1,0);
+	    p2.updatePieChart(artist1_index,upToDateList1,1);
+	    p3.updatePieChart(artist1_index,upToDateList1,2);
+	    
+	    // update info box from musicbrainz
+	    String[] s = d.getSimilarArtist(upToDateList1.get(artist1_index).getArtistName());
+	    String Mesg = "BirthDate: "+upToDateList1.get(artist1_index).getBirthDate()+"\n"+
+	    			  "Country: "+upToDateList1.get(artist1_index).getCountry()+"\n"+
+	    			  "Gender: "+upToDateList1.get(artist1_index).getGender()+"\n" +
+	    			  "Similar Arsist: " + Arrays.toString(s) + "\n";
+	    tip1.updateInfo(Mesg);
+	    artist1_selected = false;
 	  }
 	  
 	  if(artist2_selected)
 	  {
-	    //p4.updatePieChart(artist2_index);
-	    //p5.updatePieChart(artist2_index);
-	    //p6.updatePieChart(artist2_index);
+	    p4.updatePieChart(artist2_index,upToDateList2,0);
+	    p5.updatePieChart(artist2_index,upToDateList2,1);
+	    p6.updatePieChart(artist2_index,upToDateList2,2);
+	    
+	    String[] s = d.getSimilarArtist(upToDateList2.get(artist2_index).getArtistName());
+	    String Mesg = "BirthDate: "+upToDateList2.get(artist2_index).getBirthDate()+"\n"+
+	    			  "Country: "+upToDateList2.get(artist2_index).getCountry()+"\n"+
+	    			  "Gender: "+upToDateList2.get(artist2_index).getGender()+"\n" +
+	    			  "Similar Arsist: " + Arrays.toString(s) + "\n";
+	    tip2.updateInfo(Mesg);
+	    artist2_selected = false;
 	  }
 	
 	}
@@ -196,6 +214,9 @@ static ArrayList<ArtistDetails> upToDateList;
 			p4.mouseClicked();
 			p5.mouseClicked();
 			p6.mouseClicked();
+			
+			tip1.mouseClicked();
+			tip2.mouseClicked();
 		}
 		
 	}
@@ -262,16 +283,19 @@ static ArrayList<ArtistDetails> upToDateList;
 				    
 				    if(name.equals("ages2") == true){
 				      artist2_age_selected = true;
+				      artist2_age_index = (int)(theEvent.group().value());
 				      println("age:"+artist2_age_selected+"\tgender:"+artist2_gender_selected+"\tnation:"+artist2_nation_selected);
 				    }
 				    
 				    if(name.equals("gender2") == true){
 				      artist2_gender_selected = true;
+				      artist2_gender_index = (int)(theEvent.group().value());
 				     println("age:"+artist2_age_selected+"\tgender:"+artist2_gender_selected+"\tnation:"+artist2_nation_selected);
 				    }
 				    
 				    if(name.equals("nationality2") == true){
 				      artist2_nation_selected = true;
+				      artist2_nation_index =  (int)(theEvent.group().value());
 				      println("age:"+artist2_age_selected+"\tgender:"+artist2_gender_selected+"\tnation:"+artist2_nation_selected);
 				    }
 				    
@@ -279,7 +303,7 @@ static ArrayList<ArtistDetails> upToDateList;
 				    {
 				      artist1_selected = true;
 				      artist1_index = (int)theEvent.group().value();
-				      upToDateList=ListTable.getArtistList();
+				      upToDateList1=lt1.getArtistList();
 				      println("index of artist1:"+theEvent.group().value());
 				    }
 				    
@@ -287,6 +311,7 @@ static ArrayList<ArtistDetails> upToDateList;
 				    {
 				      artist2_selected = true;
 				      artist2_index = (int)theEvent.group().value();
+				      upToDateList2=lt2.getArtistList();
 				      println("index of artist2:"+theEvent.group().value());
 				    }
 				 }
@@ -320,7 +345,7 @@ static ArrayList<ArtistDetails> upToDateList;
  			  if(artist2_age_selected && artist2_gender_selected && artist2_nation_selected)
  			  {
  			    // update top artist list
- 				lt1.updateList(artist2_age_index, artist2_gender_index, artist2_nation_index);
+ 				lt2.updateList(artist2_age_index, artist2_gender_index, artist2_nation_index);
  			  }
 
  		}

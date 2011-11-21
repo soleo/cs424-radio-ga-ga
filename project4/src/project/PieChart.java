@@ -295,9 +295,9 @@ class PieChart_ {
 		  }  
 		  
 		  for(int i=0;i<pies.length;i++)
-			 {
+		  {
 			  pies[i]=(pies[i]/total)*100;
-			  }
+		  }
 		  
 		  loadData(pies);
 		  setLegend(captions);
