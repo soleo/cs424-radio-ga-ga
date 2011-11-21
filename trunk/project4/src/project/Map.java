@@ -1,20 +1,28 @@
 package project;
 import processing.core.PShape;
+import processing.core.*;
 
 public class Map { 
 	
 	PShape myshape;
 	PShape piece;
 	String[] data;
+	PShape[] theStates;
+	int counter; 
+	int theX;
+	int theY;
+	
 	
 	Map(){
 		data = Utils.globalProcessing.loadStrings("country.tsv");
 		myshape = Utils.globalProcessing.loadShape("map.svg");
 		System.out.print(myshape.getChildCount());
+		theStates = new PShape[238];
+		counter = 0;
 	}
 	
 	void drawContent(){
-		Utils.globalProcessing.background(0,42,230,190);
+		Utils.globalProcessing.background(0,42,192,190);
 		myshape.disableStyle();
 		Utils.globalProcessing.fill(0);
 		Utils.globalProcessing.stroke(0);
@@ -26,27 +34,30 @@ public class Map {
 		    String abbrevParts[]=Utils.globalProcessing.split(abbrev,'\t');
 		    String isoCode=abbrevParts[0].trim().toLowerCase();
 		    PShape state = myshape.getChild(isoCode);
-		    
 		    if (state!= null) {
-//		      float value = data.getFloat(row, 1);
-//		      if (value >= 0) {
-//		        float amt = norm(value, 0, dataMax);
-//		        float c = map(amt, 0, 1, 255, 0);
-//		        fill(100, c, 100);
-		    	Utils.globalProcessing.fill(0,192,30,240);
-		        myshape.disableStyle();
-		        state.scale(.3f,.3f);
-		        Utils.globalProcessing.shape(state);
-		        }
+		    		theStates[counter] = state;
+		    		Utils.globalProcessing.fill(0,205,0,240);
+			        myshape.disableStyle();
+			        state.scale(.3f,.3f);
+			        System.out.println(theStates[counter].getName());
+			        Utils.globalProcessing.shape(state);
+			        counter++;
+		    }       
+		    System.out.print(counter);
+
 		    Utils.globalProcessing.fill(0,0,0,128);
-		    Utils.globalProcessing.rect(10,450, Utils.globalProcessing.getWidth() - 220,Utils.globalProcessing.getHeight() - 460);
-	/*	for(int i = 4; i<= 230; i++){	
-			piece = myshape.getChild(i);
-			Utils.globalProcessing.stroke(255);
-			piece.disableStyle();
-			Utils.globalProcessing.fill(0,40,192);
-			Utils.globalProcessing.shape(piece);
-		*/}
+		    Utils.globalProcessing.rect(0,440, Utils.globalProcessing.getWidth() - 200,Utils.globalProcessing.getHeight() - 440);
+		  }
+	}
+	void mouseClicked(){
+		   theX = Utils.globalProcessing.getX();
+		   theY = Utils.globalProcessing.getY();
+		   System.out.println(theX + theY);
+		   for (int j = 0; j < theStates.length; j++){
+			   theStates[j].getParams();
+				   System.out.println(theStates[j].getParams());
+			   
+		   }
 	}
 }
 
