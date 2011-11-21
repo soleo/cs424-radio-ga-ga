@@ -1,6 +1,8 @@
 package project;
 import java.util.ArrayList;
 
+import data.DataClass;
+
 import processing.core.PShape;
 
 public class Map { 
@@ -12,6 +14,7 @@ public class Map {
 	int counter; 
 	int theX;
 	int theY;
+	DataClass dataClass;
 	
 	
 	public Map(){
@@ -35,29 +38,15 @@ public class Map {
 		counter = 0;
 	}
 	
+	void setDataClass(DataClass d)
+	{
+		this.dataClass=d;
+	}
 	void drawContent(){
 		Utils.globalProcessing.background(0,42,192,190);
 		myshape.disableStyle();
 		Utils.globalProcessing.fill(0);
 		Utils.globalProcessing.stroke(0);
-		//Utils.globalProcessing.shape(myshape);
-		//Utils.globalProcessing.stroke(0);
-//		int rowCount = data.length;
-//		  for (int row = 0; row < rowCount; row++) {
-//		    String abbrev = data[row];
-//		    String abbrevParts[]=Utils.globalProcessing.split(abbrev,'\t');
-//		    String isoCode=abbrevParts[0].trim().toLowerCase();
-//		    PShape state = myshape.getChild(isoCode);
-//		    if (state!= null) {
-//		    		theStates[counter] = state;
-//		    		Utils.globalProcessing.fill(0,205,0,240);
-//			        myshape.disableStyle();
-//			        state.scale(.3f,.3f);
-//			        System.out.println(theStates[counter].getName());
-//			        Utils.globalProcessing.shape(state);
-//			        counter++;
-//		    }       
-		    //System.out.print(counter);
 		
 			for(int i=0;i<theStates.size();i++)
 			{
@@ -71,6 +60,7 @@ public class Map {
 
 		    Utils.globalProcessing.fill(0,0,0,128);
 		    Utils.globalProcessing.rect(0,440, Utils.globalProcessing.getWidth() - 200,Utils.globalProcessing.getHeight() - 440);
+		    dataClass.getHourlyListenCount();
 		  
 	}
 	void mouseClicked(){

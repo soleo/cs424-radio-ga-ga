@@ -11,6 +11,7 @@ Menu theMenu;
 Map theMap;
 Boolean mapOpened = false;
 Boolean mapClickable = false;
+DataClass d;
 
 	
 	public void setup(){
@@ -21,8 +22,9 @@ Boolean mapClickable = false;
 		Utils.globalProcessing.smooth();
 		Utils.controlP5 = new ControlP5(this);
 		theMenu = new Menu(200);	
-		DataClass d=new DataClass();
+		d=new DataClass();
 		theMap = new Map();
+		theMap.setDataClass(d);
 	}
 	public void draw(){
 		theMenu.drawContent();
