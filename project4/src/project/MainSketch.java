@@ -9,6 +9,9 @@ public class MainSketch extends PApplet {
 	
 Menu theMenu;
 Map theMap;
+Boolean mapOpened = false;
+Boolean mapClickable = false;
+
 	
 	public void setup(){
 		Utils.globalProcessing = this;
@@ -21,8 +24,14 @@ Map theMap;
 	public void draw(){
 		theMenu.drawContent();
 	}
-	public void mousePressed(){
-	   System.out.print(Utils.globalProcessing.getMousePosition());
+	public void mouseClicked(){
+		if(mapOpened)
+		{	
+			if (mapClickable){
+				theMap.mouseClicked();
+			}
+			mapClickable = true;
+		}
 	}
 	public void controlEvent(ControlEvent theEvent) {
 		 
@@ -30,6 +39,7 @@ Map theMap;
 			System.out.print("yay");
 			 theMap = new Map();
 			 theMap.drawContent();
+			 mapOpened = true;
 		 }
 	}
 		
