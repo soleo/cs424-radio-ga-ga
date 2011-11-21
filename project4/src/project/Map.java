@@ -65,8 +65,8 @@ public class Map {
 		  g2d.drawImage((java.awt.Image)pg.image, 0, 0, width, height, Utils.globalProcessing);
 		  g2d.finalize();
 		  g2d.dispose();
-		  File f = new File("myimage.png");
-		  try{ImageIO.write(img, "png", f);}catch(Exception e){}
+		  //File f = new File("myimage.png");
+		  //try{ImageIO.write(img, "png", f);}catch(Exception e){}
 
 		counter = 0;
 	}
