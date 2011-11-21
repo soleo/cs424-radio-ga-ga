@@ -3,6 +3,9 @@ package project;
 import controlP5.*;
 import data.DataClass;
 import processing.core.*;
+import project.Map;
+import project.Menu;
+import project.Utils;
 
 
 public class MainSketch extends PApplet {

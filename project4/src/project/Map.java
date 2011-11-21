@@ -17,12 +17,19 @@ public class Map {
 	int theY;
 	DataClass dataClass;
 	
-	
 	public Map(){
-		theStates=new ArrayList<PShape>();
 		data = Utils.globalProcessing.loadStrings("country.tsv");
 		myshape = Utils.globalProcessing.loadShape("map.svg");
 		System.out.print(myshape.getChildCount());
+	}
+	
+	public void drawContent(){
+		Utils.globalProcessing.background(0,42,230,190);
+		myshape.disableStyle();
+		Utils.globalProcessing.fill(0);
+		Utils.globalProcessing.stroke(0);
+		//Utils.globalProcessing.shape(myshape);
+		//Utils.globalProcessing.stroke(0);
 		int rowCount = data.length;
 		  for (int row = 0; row < rowCount; row++) {
 		    String abbrev = data[row];
