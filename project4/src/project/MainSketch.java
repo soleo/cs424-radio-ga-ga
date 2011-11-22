@@ -152,12 +152,25 @@ boolean weeklyTopArtistSelected;
 	    p2.updatePieChart(artist1_index,upToDateList1,1);
 	    p3.updatePieChart(artist1_index,upToDateList1,2);
 	    
-	    // update info box from musicbrainz
+	    // update info box from musicbrainz and last.fm api
 	    String[] s = d.getSimilarArtist(upToDateList1.get(artist1_index).getArtistName());
-	    String Mesg = "BirthDate: "+upToDateList1.get(artist1_index).getBirthDate()+"\n"+
-	    			  "Country: "+upToDateList1.get(artist1_index).getCountry()+"\n"+
-	    			  "Gender: "+upToDateList1.get(artist1_index).getGender()+"\n" +
-	    			  "Similar Arsist: " + Arrays.toString(s) + "\n";
+	    String Mesg = "BirthDate: ";
+	    if(upToDateList1.get(artist1_index).getBirthDate().isEmpty())
+	    	Mesg += "Unknown\n";
+	    else
+	    	Mesg += upToDateList1.get(artist1_index).getBirthDate()+"\n";
+	    if(upToDateList1.get(artist1_index).getCountry().isEmpty())
+	    	Mesg += "Country: Unknown\n";
+	    else
+	    	Mesg += "Country: "+upToDateList1.get(artist1_index).getCountry()+"\n";
+	    if(upToDateList1.get(artist1_index).getGender().isEmpty())
+	    	Mesg += "Gender: Unknown\n";
+	    else
+	    	Mesg += "Gender: "+upToDateList1.get(artist1_index).getGender()+"\n";
+	    
+	    Mesg += "Similar Arsist: " + Arrays.toString(s) + "\n";
+
+	    			  
 	    tip1.updateInfo(Mesg);
 	    artist1_selected = false;
 	  }
@@ -169,10 +182,21 @@ boolean weeklyTopArtistSelected;
 	    p6.updatePieChart(artist2_index,upToDateList2,2);
 	    
 	    String[] s = d.getSimilarArtist(upToDateList2.get(artist2_index).getArtistName());
-	    String Mesg = "BirthDate: "+upToDateList2.get(artist2_index).getBirthDate()+"\n"+
-	    			  "Country: "+upToDateList2.get(artist2_index).getCountry()+"\n"+
-	    			  "Gender: "+upToDateList2.get(artist2_index).getGender()+"\n" +
-	    			  "Similar Arsist: " + Arrays.toString(s) + "\n";
+	    
+	    String Mesg = "BirthDate: ";
+	    if(upToDateList2.get(artist2_index).getBirthDate().isEmpty())
+	    	Mesg += "Unknown\n";
+	    else
+	    	Mesg += upToDateList2.get(artist2_index).getBirthDate()+"\n";
+	    if(upToDateList2.get(artist2_index).getCountry().isEmpty())
+	    	Mesg += "Country: Unknown\n";
+	    else
+	    	Mesg += "Country: "+upToDateList2.get(artist2_index).getCountry()+"\n";
+	    if(upToDateList2.get(artist2_index).getGender().isEmpty())
+	    	Mesg += "Gender: Unknown\n";
+	    else
+	    	Mesg += "Gender: "+upToDateList2.get(artist2_index).getGender()+"\n";
+	    
 	    tip2.updateInfo(Mesg);
 	    artist2_selected = false;
 	  }
