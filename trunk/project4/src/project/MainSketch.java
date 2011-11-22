@@ -196,7 +196,7 @@ boolean weeklyTopArtistSelected;
 	    	Mesg += "Gender: Unknown\n";
 	    else
 	    	Mesg += "Gender: "+upToDateList2.get(artist2_index).getGender()+"\n";
-	    
+	    Mesg += "Similar Arsist: " + Arrays.toString(s) + "\n";
 	    tip2.updateInfo(Mesg);
 	    artist2_selected = false;
 	  }
