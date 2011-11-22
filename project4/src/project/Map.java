@@ -147,6 +147,12 @@ public class Map {
 				Utils.globalProcessing.shape(currentShape);
 				currentShape.scale(1/.3f,1/.3f);
 			}
+			
+				for(int k = 55; k<=255; k++){
+					Utils.globalProcessing.stroke(k,0,0);
+					Utils.globalProcessing.line(20, k+95, 40, k+95);
+				}
+			
 			drawBottom();
 	}
 			
