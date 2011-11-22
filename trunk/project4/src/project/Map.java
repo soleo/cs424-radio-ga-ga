@@ -32,6 +32,8 @@ public class Map {
 	PieChart_ pieSex;
 	PieChart_ pieAge;
 	
+	String iso = "";
+	
 	public Map(DataClass d){
 		dataClass=d;
 		theStates=new ArrayList<PShape>();
@@ -149,13 +151,42 @@ public class Map {
 			void drawBottom(){
 
 			// Line Graph for play count
-			Utils.globalProcessing.fill(0,0,0,128);
-		    Utils.globalProcessing.rect(0,440, Utils.globalProcessing.getWidth() - 200,Utils.globalProcessing.getHeight() - 440);
-		    Utils.globalProcessing.textAlign(Utils.globalProcessing.CENTER,Utils.globalProcessing.CENTER);
+				//Utils.globalProcessing.fill(0);
+			    //Utils.globalProcessing.rect(0,440, Utils.globalProcessing.getWidth() - 200,Utils.globalProcessing.getHeight() - 440);
+			    Utils.globalProcessing.fill(0,0,0,128);
+			    Utils.globalProcessing.rect(0,440, Utils.globalProcessing.getWidth() - 200,Utils.globalProcessing.getHeight() - 440);
+			    Utils.globalProcessing.textAlign(Utils.globalProcessing.CENTER,Utils.globalProcessing.CENTER);
 		    
 		    int graphX = 30, graphY = 445, graphWidth = Utils.globalProcessing.getWidth() - 380, graphHeight = Utils.globalProcessing.height - 20 - graphY;
 		    
-		    int[] hourlyData=dataClass.getHourlyListenCount();
+		    //int[] hourlyData=null;//dataClass.getHourlyListenCount();
+		    int[] hourlyData=null; // comment out everything from here to the if(hourlyData == null)
+            System.out.println(iso);
+            String dataOrigin = "whole world";
+            if(dataClass.isCountryCodePresent(iso))
+            {
+                Country c = dataClass.getCountryByCode(iso);
+                hourlyData = new int[24];
+                int count = 0;
+                for(int i=0; i<24; i++)
+                {
+                    hourlyData[i] = c.getHourlyPlayCount(i);
+                    count += hourlyData[i];
+                }
+                //System.out.println(c.name + " : hourly count : " + Arrays.toString(hourlyData));
+                if(count < 100) // just a threshold, 0 should be fine
+                {
+                	hourlyData = null;
+                }
+                dataOrigin = (hourlyData == null) ? "whole world" : c.name;
+                
+            }
+           
+            if(hourlyData == null)
+            {
+                hourlyData=dataClass.getHourlyListenCount();
+            }
+            
 		    int[] tempData=(int[])hourlyData.clone();
 		    Arrays.sort(tempData);
 		    int minData=tempData[0];
@@ -174,7 +205,10 @@ public class Map {
 		    Utils.globalProcessing.text("Number of listeners (in thousands)",0,0);
 		    Utils.globalProcessing.rotate((float)Math.PI/2);
 		    Utils.globalProcessing.translate(-graphX/2+2, -graphY-graphHeight/2);
-		    Utils.globalProcessing.fill(0,0,0,128);
+		    
+		    Utils.globalProcessing.fill(20,60,130);
+		    Utils.globalProcessing.rect(graphX, graphY, graphWidth, graphHeight);
+		    Utils.globalProcessing.fill(0,0,0,196);
 		    Utils.globalProcessing.rect(graphX, graphY, graphWidth, graphHeight);
 		    Utils.globalProcessing.fill(0,205,0,240);
 		    Utils.globalProcessing.strokeWeight(2);
@@ -188,7 +222,7 @@ public class Map {
 		    	//Utils.globalProcessing.point(pointX,pointY);
 		    	//int xoffset = 0;//(i==0)?0:(graphWidth)/48;
 		    	Utils.globalProcessing.vertex(pointX,pointY);
-		    	System.out.println("Y : " + pointY + " count: " + count);
+		    	//System.out.println("Y : " + pointY + " count: " + count);
 		    	if(i==0) pointX += 4;
 		    	else if(i==hourlyData.length-1) pointX -= 4; // move the last label in
 		    	Utils.globalProcessing.text(""+i,pointX,graphY+graphHeight-9);
@@ -197,8 +231,11 @@ public class Map {
 		    Utils.globalProcessing.text("Hours of day",graphX+graphWidth/2,graphY+graphHeight+9);
 		    
 		    int v = 100000;//((minData/100000)+1)*100000;
-		    int i=0;
-		    for ( ; v <= maxData; v += 100000) {
+		    int legendCount = 10;
+		    int i=0, k=maxData/legendCount;
+		    for (; k/10 > 0 ; i++) k = k / 10; 
+		    int legendStep = k * (int)Math.pow(10, i);
+		    for (v=legendStep,i=0 ; v <= maxData; v += legendStep) {
 		    	float y = Utils.globalProcessing.map(v, 0, maxData, graphY+graphHeight, graphY+5);
 		    	
 		    	float textOffset = Utils.globalProcessing.textAscent()/2;  // Center vertically
@@ -216,15 +253,16 @@ public class Map {
 		    
 		  // end of Line Graph for play count
 		  Utils.globalProcessing.textAlign(Utils.globalProcessing.LEFT);
-		 
-		 
+
+          Utils.globalProcessing.text("Listeners counts for " + dataOrigin , graphX+graphWidth/2+graphWidth/6, graphY+graphHeight - 25);
+          
 		  pieSex.show();
 		  pieAge.show();
 	}
 	void mouseClicked()
 	{
 		int mouseX = Utils.globalProcessing.mouseX, mouseY= Utils.globalProcessing.mouseY;
-		String iso = "";
+		iso = "";
 		if(mouseX<=824 && mouseY<=440)
 		{
 			
@@ -245,8 +283,8 @@ public class Map {
 			{
 				System.out.println(outboundException.toString());
 			}	
+			drawBottom();
 		}
-		
 	}
 	
 	void updatePieChart(String iso)
