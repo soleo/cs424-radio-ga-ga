@@ -165,9 +165,9 @@ public class DataClass {
 	
 	void loadConnection() throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException
 	{
-		String userName="soleo";//enter username
-		String password="123456";//enter password
-		String url="jdbc:mysql://192.168.142.147/gaga?user="+userName+"&password="+password;
+		String userName="root";//enter username
+		String password="";//enter password
+		String url="jdbc:mysql://localhost/gaga?user="+userName+"&password="+password;
 		Class.forName("com.mysql.jdbc.Driver").newInstance();
 		conn=DriverManager.getConnection(url);
 		

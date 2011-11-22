@@ -22,6 +22,8 @@ DataClass d;
 boolean comparisonViewSelected;
 PieChart_ p1, p2, p3, p4, p5, p6;
 ListTable lt1, lt2;
+boolean startScreen = true;
+boolean loadData = true;
 
 boolean artist1_age_selected,artist1_gender_selected,artist1_nation_selected;
 boolean artist2_age_selected,artist2_gender_selected,artist2_nation_selected;
@@ -32,6 +34,7 @@ int artist2_age_index, artist2_gender_index, artist2_nation_index;
 InfoBox tip1,tip2;
 static ArrayList<ArtistDetails> upToDateList1,upToDateList2;
 // for weekly top artist
+boolean howToUseSelected;
 boolean weeklyTopArtistSelected;
 	public void setup(){
 		
@@ -44,15 +47,12 @@ boolean weeklyTopArtistSelected;
 		Utils.controlP5 = new ControlP5(this);
 		theInstructions = new Instructions();
 		theMenu = new Menu(200);	
+		theMenu.drawContent();
+		theInstructions.drawContent();
+
 		
-		d=new DataClass();
-		System.out.println("setting up");
-		theMap = new Map(d);
-		theMap.setDataClass(d);
+
 		
-		setupComparisonView();
-		
-		setupWeeklyTopArtist();
 	}
 	void setupWeeklyTopArtist(){
 		weeklyTopArtistSelected =  false;
@@ -203,15 +203,30 @@ boolean weeklyTopArtistSelected;
 	
 	}
 	public void draw(){
+		if (loadData){
+			d=new DataClass();
+			System.out.println("setting up");
+		theMap = new Map(d);
+		theMap.setDataClass(d);		
+		setupComparisonView();
+		
+		setupWeeklyTopArtist();
+		loadData = false;}
+		
 		theMenu.drawContent();
 		
+		
+		if ((howToUseSelected)||(startScreen)){
+			
+			theInstructions.drawContent();
+		}
 		if (weeklyTopArtistSelected){
 			lt1.hide();
 			lt2.hide();
 			fill(255);
 			rect(0,0,824,768);
 			fill(0);
-			rect(0,0,822,768);
+			rect(0,0,824,768);
 			
 			
 			
@@ -270,6 +285,8 @@ boolean weeklyTopArtistSelected;
 					if(comparisonViewSelected)
 						comparisonViewSelected = false;
 					weeklyTopArtistSelected = false;
+					howToUseSelected = false;
+					startScreen = false;
 					try
 					{
 						lt1.hide();
@@ -288,11 +305,22 @@ boolean weeklyTopArtistSelected;
 					 System.out.println("comparsion:"+comparisonViewSelected);
 					 comparisonViewSelected = true;	 
 					 weeklyTopArtistSelected = false;
+					 howToUseSelected = false;
+					 startScreen = false;
 				 }
 				 else if(theEvent.controller().name().equals("Top Artists of the Week") == true){
 					 System.out.println("Top Artists of the Week");
 					 weeklyTopArtistSelected = true;
 					 comparisonViewSelected = false;
+					 howToUseSelected = false;
+					 startScreen = false;
+				 }
+				 else if(theEvent.controller().name().equals("How to Use") == true){
+					 System.out.println("How to Use");
+					 weeklyTopArtistSelected = false;
+					 comparisonViewSelected = false;
+					 howToUseSelected = true;
+					 startScreen = false;
 					 
 				 }
 		 }
