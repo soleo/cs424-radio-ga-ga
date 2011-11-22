@@ -27,7 +27,10 @@ public class Map {
 	int width = 824;
 	int height = 440;
 	BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB_PRE  );
-	
+	int g; 
+	int b;
+	PieChart_ pie1;
+	PieChart_ pie2;
 	
 	public Map(DataClass d){
 		dataClass=d;
@@ -60,7 +63,7 @@ public class Map {
 				currentShape.disableStyle();
 				currentShape.scale(.3f,.3f);
 				pg.shape(currentShape);
-				currentShape.scale(3.333f,3.333f);
+				currentShape.scale(1/.3f,1/.3f);
 			}
 		  pg.endDraw();
 		  Graphics2D g2d = img.createGraphics();
@@ -79,57 +82,89 @@ public class Map {
 	}
 	void drawContent(){
 		//Utils.globalProcessing.background(0,42,192,190);
-		Utils.globalProcessing.background(255);
+		Utils.globalProcessing.background(20,60,130);
 		myshape.disableStyle();
 		Utils.globalProcessing.fill(0);
 		Utils.globalProcessing.stroke(0);
 		long maxListeners=dataClass.getMaxListeners();
+		double logMaxListeners=Math.log10(maxListeners);
 		
 			for(int i=0;i<theStates.size();i++)
 			{
 				PShape currentShape=theStates.get(i);
 				//Utils.globalProcessing.fill(0,205,0,240);
 				float scaledColorValue;
+				g = 0; 
+				b = 0;
 				if(dataClass.isCountryCodePresent(currentShape.getName()))
 				{
 					Country currentCountry=dataClass.getCountryByCode(currentShape.getName());
 					long listeners=currentCountry.getTotalListeners();
+					double logListeners = Math.log10(listeners);
+						
+//					scaledColorValue=Utils.globalProcessing.map(listeners,0,maxListeners, 0,180);
+//					scaledColorValue = 255 - scaledColorValue;
+//					float normalizedListeners=Utils.globalProcessing.norm(listeners,0,255);
 					
-					//scaledColorValue=Utils.globalProcessing.map(listeners,0,maxListeners,255,100);
-					float normalizedListeners=Utils.globalProcessing.norm(listeners,0,255);
+					scaledColorValue=(float) (255 + logListeners * (0 - 200) / ( logMaxListeners - 0 ) );
+					//scaledColorValue = 255 - scaledColorValue;
 					
-					scaledColorValue=Utils.globalProcessing.lerpColor( 0xF62817,0x000000 , listeners);
-					System.out.println(scaledColorValue);
+					if (listeners < 1000){
+					
+						scaledColorValue = 100 + 40 * listeners / 1000;
+						g = b = (int)scaledColorValue;
+						System.out.print(listeners);
+					}
+					
+					
+					System.out.println("Scaled Color Val b4 lerp:"+scaledColorValue + listeners);
+					
+					//System.out.println("Scaled Color Val b4 lerp:"+scaledColorValue+ ":" +listeners +"/"+ maxListeners);
+					//scaledColorValue=Utils.globalProcessing.lerpColor( 0xF62817,0x000000 , listeners);
 					
 				}
 				else
 				{
 					scaledColorValue=0;
 				}
-				Utils.globalProcessing.fill(scaledColorValue);
+				Utils.globalProcessing.fill(scaledColorValue, g, b);
 				currentShape.disableStyle();
 				currentShape.scale(.3f,.3f);
 				Utils.globalProcessing.shape(currentShape);
-				currentShape.scale(3.333f,3.333f);
+				currentShape.scale(1/.3f,1/.3f);
 			}
+			drawBottom();
+	}
+			void drawBottom(){
 
-		    Utils.globalProcessing.fill(0,0,0,128);
+			// Line Graph for play count
+			Utils.globalProcessing.fill(0,0,0,128);
 		    Utils.globalProcessing.rect(0,440, Utils.globalProcessing.getWidth() - 200,Utils.globalProcessing.getHeight() - 440);
+		    Utils.globalProcessing.textAlign(Utils.globalProcessing.CENTER,Utils.globalProcessing.CENTER);
+		    
+		    int graphX = 30, graphY = 445, graphWidth = Utils.globalProcessing.getWidth() - 380, graphHeight = Utils.globalProcessing.height - 20 - graphY;
+		    
 		    int[] hourlyData=dataClass.getHourlyListenCount();
-		    int[] tempData=hourlyData;
+		    int[] tempData=(int[])hourlyData.clone();
 		    Arrays.sort(tempData);
 		    int minData=tempData[0];
-		    int maxData=tempData[tempData.length-1]+400;
+		    int maxData=tempData[tempData.length-1];//+400;
+		    maxData=((maxData/10000)+1)*10000;
+		    
 		    Utils.globalProcessing.fill(0,205,0,240);
-		    Utils.globalProcessing.stroke(25);
+		    Utils.globalProcessing.stroke(0,205,0);
 		    Utils.globalProcessing.strokeWeight(1);
 		    
 		    
 		    Utils.globalProcessing.textSize(13);
-		    //Utils.globalProcessing.textAlign(Utils.globalProcessing.CENTER,Utils.globalProcessing.CENTER);
-		    Utils.globalProcessing.text("Number\nof\nlisteners",20,(450+720)/2);
-		    Utils.globalProcessing.fill(255);
-		    Utils.globalProcessing.rect(40, 450, 780, 320);
+		    //Utils.globalProcessing.text("Number\nof\nlisteners",20,(450+720)/2);
+		    Utils.globalProcessing.translate(graphX/2-2,graphY+graphHeight/2);
+		    Utils.globalProcessing.rotate(-(float)Math.PI/2);
+		    Utils.globalProcessing.text("Number of listeners (in thousands)",0,0);
+		    Utils.globalProcessing.rotate((float)Math.PI/2);
+		    Utils.globalProcessing.translate(-graphX/2+2, -graphY-graphHeight/2);
+		    Utils.globalProcessing.fill(0,0,0,128);
+		    Utils.globalProcessing.rect(graphX, graphY, graphWidth, graphHeight);
 		    Utils.globalProcessing.fill(0,205,0,240);
 		    Utils.globalProcessing.strokeWeight(2);
 		    Utils.globalProcessing.beginShape();
@@ -137,15 +172,53 @@ public class Map {
 		    for(int i=0;i<hourlyData.length;i++)
 		    {
 		    	long count=hourlyData[i];
-		    	float pointY=Utils.globalProcessing.map(count,0,maxData,Utils.globalProcessing.getHeight()-45,455);
-		    	float pointX=Utils.globalProcessing.map(i, 0, hourlyData.length-1, 45, 795);
+		    	float pointY=Utils.globalProcessing.map(count,0,maxData,graphY+graphHeight, graphY+5);
+		    	float pointX=Utils.globalProcessing.map(i, 0, hourlyData.length-1, graphX+5, graphX+graphWidth-5);
 		    	//Utils.globalProcessing.point(pointX,pointY);
+		    	//int xoffset = 0;//(i==0)?0:(graphWidth)/48;
 		    	Utils.globalProcessing.vertex(pointX,pointY);
+		    	System.out.println("Y : " + pointY + " count: " + count);
+		    	if(i==0) pointX += 4;
+		    	else if(i==hourlyData.length-1) pointX -= 4; // move the last label in
+		    	Utils.globalProcessing.text(""+i,pointX,graphY+graphHeight-9);
 		    }
 		    Utils.globalProcessing.endShape();
-		    Utils.globalProcessing.fill(0,0,0,128);
+		    Utils.globalProcessing.text("Hours of day",graphX+graphWidth/2,graphY+graphHeight+9);
+		    
+		    int v = 100000;//((minData/100000)+1)*100000;
+		    int i=0;
+		    for ( ; v <= maxData; v += 100000) {
+		    	float y = Utils.globalProcessing.map(v, 0, maxData, graphY+graphHeight, graphY+5);
+		    	
+		    	float textOffset = Utils.globalProcessing.textAscent()/2;  // Center vertically
+		            if (v == minData) {
+		              textOffset = 0;                   // Align by the bottom
+		            } else if (v == maxData) {
+		              textOffset = Utils.globalProcessing.textAscent();        // Align by the top
+		            }
+		            if(i++%2 == 1)Utils.globalProcessing.text(v/1000, graphX + 20, y );//+ textOffset);
+		            Utils.globalProcessing.line(graphX , y, graphX+4, y);     // Draw major tick
+		    }
+		    
+		    Utils.globalProcessing.fill(0,205,0,240);
 		    Utils.globalProcessing.strokeWeight(1);
-		  
+		    
+		  // end of Line Graph for play count
+		  Utils.globalProcessing.textAlign(Utils.globalProcessing.LEFT);
+		 
+		  float[] data1 = {25,75};
+		  float[] data2 = {50,10,40};
+		  String[] l1 = {"Male", "Female"};
+		  String[] l2 = {"Male", "Female", "sdf"};
+		  //adding piecharts 
+		  pie1 = new PieChart_(Utils.globalProcessing,Utils.globalProcessing.getWidth() - 320,Utils.globalProcessing.getHeight() - 225,100,100);
+		  pie1.loadData(data1);
+		  pie1.setLegend(l1);
+		  pie2 = new PieChart_(Utils.globalProcessing,Utils.globalProcessing.getWidth() - 320,Utils.globalProcessing.getHeight() - 115,100,100);
+		  pie2.loadData(data2);
+		  pie2.setLegend(l2);
+		  pie1.show();
+		  pie2.show();
 	}
 	void mouseClicked(){
 		int mouseX = Utils.globalProcessing.mouseX, mouseY= Utils.globalProcessing.mouseY;
