@@ -21,6 +21,16 @@ public class Artist implements Serializable{
 	
 	HashMap<String,Integer> ageGroupListeners=new HashMap<String,Integer>();
 	
+	public void setAgeGroupListeners(HashMap<String,Integer> temp)
+	{
+		ageGroupListeners=temp;
+	}
+	
+	public HashMap<String,Integer> getAgeGroupListeners()
+	{
+		return ageGroupListeners;
+	}
+	
 	public String getBirthDate() {
 		return birthDate;
 	}
