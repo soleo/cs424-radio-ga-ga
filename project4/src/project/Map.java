@@ -159,8 +159,8 @@ public class Map {
 	void drawBottom(){
 
 			// Line Graph for play count
-				//Utils.globalProcessing.fill(0);
-			    //Utils.globalProcessing.rect(0,440, Utils.globalProcessing.getWidth() - 200,Utils.globalProcessing.getHeight() - 440);
+				Utils.globalProcessing.fill(20,60,130);
+			    Utils.globalProcessing.rect(0,440, Utils.globalProcessing.getWidth() - 200,Utils.globalProcessing.getHeight() - 440);
 			    Utils.globalProcessing.fill(0,0,0,128);
 			    Utils.globalProcessing.rect(0,440, Utils.globalProcessing.getWidth() - 200,Utils.globalProcessing.getHeight() - 440);
 			    Utils.globalProcessing.textAlign(Utils.globalProcessing.CENTER,Utils.globalProcessing.CENTER);
@@ -214,9 +214,7 @@ public class Map {
 		    Utils.globalProcessing.rotate((float)Math.PI/2);
 		    Utils.globalProcessing.translate(-graphX/2+2, -graphY-graphHeight/2);
 		    
-		    Utils.globalProcessing.fill(20,60,130);
-		    Utils.globalProcessing.rect(graphX, graphY, graphWidth, graphHeight);
-		    Utils.globalProcessing.fill(0,0,0,196);
+		    Utils.globalProcessing.fill(0,0,0,128);
 		    Utils.globalProcessing.rect(graphX, graphY, graphWidth, graphHeight);
 		    Utils.globalProcessing.fill(0,205,0,240);
 		    Utils.globalProcessing.strokeWeight(2);
