@@ -14,6 +14,7 @@ public class MainSketch extends PApplet {
 	
 Menu theMenu;
 Map theMap;
+Instructions theInstructions;
 Boolean mapOpened = false;
 Boolean mapClickable = false;
 DataClass d;
@@ -37,10 +38,11 @@ boolean weeklyTopArtistSelected;
 		
 		theMap=null;
 		Utils.globalProcessing = this;
+		Utils.globalProcessing.background(0);
 		Utils.globalProcessing.size(1024, 768);
 		Utils.globalProcessing.smooth();
 		Utils.controlP5 = new ControlP5(this);
-		
+		theInstructions = new Instructions();
 		theMenu = new Menu(200);	
 		
 		d=new DataClass();
