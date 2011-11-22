@@ -1,5 +1,6 @@
 package project;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -214,7 +215,10 @@ class PieChart_ {
     {
       setupLabel(savedIndex);
       tooltip.setAnchor(Direction.NORTH);
-      tooltip.setText(legends[savedIndex]+":"+data[savedIndex]+"%");
+      DecimalFormat df=new DecimalFormat("###.##");
+      String toolTipPercentage=df.format(data[savedIndex]);
+      //tooltip.setText(legends[savedIndex]+":"+data[savedIndex]+"%");
+      tooltip.setText(legends[savedIndex]+":"+toolTipPercentage+"%");
       tooltip.setIsActive(true);
       parent.println(savedIndex);
     }
