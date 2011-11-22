@@ -93,6 +93,7 @@ public class Map {
 	{
 		this.dataClass=d;
 	}
+	
 	void drawContent(){
 		//Utils.globalProcessing.background(0,42,192,190);
 		Utils.globalProcessing.background(20,60,130);
@@ -126,7 +127,7 @@ public class Map {
 					
 						scaledColorValue = 100 + 40 * listeners / 1000;
 						g = b = (int)scaledColorValue;
-						System.out.print(listeners);
+						//System.out.print(listeners);
 					}
 					
 					
@@ -148,7 +149,8 @@ public class Map {
 			}
 			drawBottom();
 	}
-			void drawBottom(){
+			
+	void drawBottom(){
 
 			// Line Graph for play count
 				//Utils.globalProcessing.fill(0);
@@ -289,8 +291,9 @@ public class Map {
 	
 	void updatePieChart(String iso)
 	{
+		if(dataClass.isCountryCodePresent(iso)) return;
+		
 		Country c = dataClass.getCountryByCode(iso);
-		if(c == null || iso =="") return;
 		
 		float ageCount[] = new float[6];
 		float sexCount[] = new float[3];
@@ -314,6 +317,8 @@ public class Map {
 		total = 0;
 		for(int i=0; i <3; i++) total += sexCount[i];
 		for(int i=0; i <3; i++) sexCount[i] = sexCount[i] * 100 /total;
+		
+		System.out.println(Arrays.toString(sexCount) + Arrays.toString(ageCount));
 		
 		pieSex.loadData(sexCount);
 		pieSex.setLegend(sexes);
