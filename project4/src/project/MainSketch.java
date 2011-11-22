@@ -30,7 +30,8 @@ int artist1_age_index, artist1_gender_index, artist1_nation_index;
 int artist2_age_index, artist2_gender_index, artist2_nation_index;
 InfoBox tip1,tip2;
 static ArrayList<ArtistDetails> upToDateList1,upToDateList2;
-	
+// for weekly top artist
+boolean weeklyTopArtistSelected;
 	public void setup(){
 		
 		
@@ -48,8 +49,12 @@ static ArrayList<ArtistDetails> upToDateList1,upToDateList2;
 		theMap.setDataClass(d);
 		
 		setupComparisonView();
+		
+		setupWeeklyTopArtist();
 	}
-	
+	void setupWeeklyTopArtist(){
+		weeklyTopArtistSelected =  false;
+	}
 	void setupComparisonView(){
 		// comparison setup
 		  comparisonViewSelected = false;
@@ -174,8 +179,20 @@ static ArrayList<ArtistDetails> upToDateList1,upToDateList2;
 	public void draw(){
 		theMenu.drawContent();
 		
+		if (weeklyTopArtistSelected){
+			lt1.hide();
+			lt2.hide();
+			fill(255);
+			rect(0,0,824,768);
+			fill(0);
+			rect(0,0,822,768);
+			
+			
+			
+		}
 		if (comparisonViewSelected){
-			  
+			  fill(255);
+			  rect(0,0,824,768);
 			  fill(0);
 			  rect(0,0,822,768);
 			  //background(0);
@@ -226,6 +243,7 @@ static ArrayList<ArtistDetails> upToDateList1,upToDateList2;
 					System.out.println("yay");
 					if(comparisonViewSelected)
 						comparisonViewSelected = false;
+					weeklyTopArtistSelected = false;
 					try
 					{
 						lt1.hide();
@@ -242,7 +260,14 @@ static ArrayList<ArtistDetails> upToDateList1,upToDateList2;
 				 else if(theEvent.controller().name().equals("Comparison Graph") == true){
 					 System.out.println("CompareView");
 					 System.out.println("comparsion:"+comparisonViewSelected);
-					 comparisonViewSelected = true;	   
+					 comparisonViewSelected = true;	 
+					 weeklyTopArtistSelected = false;
+				 }
+				 else if(theEvent.controller().name().equals("Top Artists of the Week") == true){
+					 System.out.println("Top Artists of the Week");
+					 weeklyTopArtistSelected = true;
+					 comparisonViewSelected = false;
+					 
 				 }
 		 }
 		 

@@ -57,7 +57,7 @@ class PieChart_ {
     diameter=parent.min(w_,h_);
   }
   
-  void show()
+  public void show()
   {
     if (setAutomateColor)
     {
@@ -105,7 +105,7 @@ class PieChart_ {
     }
   }
   
-  void loadData(float[] data)
+  public void loadData(float[] data)
   {
     categries = data.length;
     this.data = data;
@@ -131,7 +131,7 @@ class PieChart_ {
     
   }
   
-  void setLegend(String[] l)
+  public void setLegend(String[] l)
   {
     legends = l;
     font = parent.createFont("Helvetica-Light-14", 14);
@@ -205,7 +205,7 @@ class PieChart_ {
       return -1;
   }
 
-  void mouseClicked()
+  public void mouseClicked()
   {
     
     savedIndex = getArcIndex ();
@@ -224,7 +224,7 @@ class PieChart_ {
     }
   }
   
-  void setupLabel(int index)
+  public void setupLabel(int index)
   {
     tooltip.showCloseIcon(false);
     tooltip.setBackgroundColour(parent.color(0,0,0,233));
@@ -233,7 +233,7 @@ class PieChart_ {
     tipY=parent.mouseY;
   }
   
-  void updatePieChart(int index,ArrayList<ArtistDetails> details,int type)
+  public void updatePieChart(int index,ArrayList<ArtistDetails> details,int type)
   {
 	  ArtistDetails artist=details.get(index);
 	  if(type==0)
