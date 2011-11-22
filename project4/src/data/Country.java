@@ -73,7 +73,7 @@ public class Country implements Serializable{
 	{
 		if(hourly_count.length() == 0) return 0;
 		
-		return Integer.parseInt((hourly_count.split(","))[hour]);
+		return Integer.parseInt((hourly_count.replace("[", "").replace("]", "").split(","))[hour].trim());
 	}
 	
 	/**
