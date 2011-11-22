@@ -295,10 +295,10 @@ public class Map {
 	
 	void updatePieChart(String iso)
 	{
-		if(dataClass.isCountryCodePresent(iso)) return;
+		if(!dataClass.isCountryCodePresent(iso)) return;
 		
 		Country c = dataClass.getCountryByCode(iso);
-		
+		if(c==null) return;
 		float ageCount[] = new float[6];
 		float sexCount[] = new float[3];
 		String ages[] = {"13-18","19-24","25-35","36-45","46-64","above 65"};
