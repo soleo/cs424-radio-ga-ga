@@ -154,7 +154,7 @@ boolean weeklyTopArtistSelected;
 	    
 	    // update info box from musicbrainz and last.fm api
 	    String[] s = d.getSimilarArtist(upToDateList1.get(artist1_index).getArtistName());
-	    String Mesg = "BirthDate: ";
+	    String Mesg = "Name:"+upToDateList1.get(artist1_index).getArtistName()+"\n"+"BirthDate: ";
 	    if(upToDateList1.get(artist1_index).getBirthDate().isEmpty())
 	    	Mesg += "Unknown\n";
 	    else
@@ -183,7 +183,7 @@ boolean weeklyTopArtistSelected;
 	    
 	    String[] s = d.getSimilarArtist(upToDateList2.get(artist2_index).getArtistName());
 	    
-	    String Mesg = "BirthDate: ";
+	    String Mesg = "Name:"+upToDateList2.get(artist2_index).getArtistName()+"\n"+"BirthDate: ";
 	    if(upToDateList2.get(artist2_index).getBirthDate().isEmpty())
 	    	Mesg += "Unknown\n";
 	    else
