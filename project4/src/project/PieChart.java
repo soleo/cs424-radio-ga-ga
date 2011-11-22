@@ -8,6 +8,7 @@ import org.gicentre.utils.spatial.Direction;
 
 import processing.core.PFont;
 import data.ArtistDetails;
+import data.Country;
 
 
 class PieChart_ {
@@ -231,6 +232,11 @@ class PieChart_ {
     tooltip.setTextColour(255);
     tipX=parent.mouseX;
     tipY=parent.mouseY;
+  }
+  
+  public void updatePieChart(String CountryIndex, Country c, int type)
+  {
+	  
   }
   
   public void updatePieChart(int index,ArrayList<ArtistDetails> details,int type)

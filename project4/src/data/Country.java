@@ -104,15 +104,17 @@ public class Country implements Serializable{
 	public int getAgeGroupCount(int age)
 	{
 		if(age_group_count.length() == 0) return 0;
-		
+		//System.out.println(age_group_count);
+		//Arrays.
+		String str = age_group_count.replace("[", "").replace("]", "").trim();
 		switch(age)
 		{
-		case 13: return Integer.parseInt((age_group_count.split(","))[0]);
-		case 19: return Integer.parseInt((age_group_count.split(","))[1]);
-		case 25: return Integer.parseInt((age_group_count.split(","))[2]);
-		case 36: return Integer.parseInt((age_group_count.split(","))[3]);
-		case 46: return Integer.parseInt((age_group_count.split(","))[4]);
-		case 65: return Integer.parseInt((age_group_count.split(","))[5]);
+		case 13: return Integer.parseInt((str.split(","))[0].trim());
+		case 19: return Integer.parseInt((str.split(","))[1].trim());
+		case 25: return Integer.parseInt((str.split(","))[2].trim());
+		case 36: return Integer.parseInt((str.split(","))[3].trim());
+		case 46: return Integer.parseInt((str.split(","))[4].trim());
+		case 65: return Integer.parseInt((str.split(","))[5].trim());
 		}
 		return 0;
 	}

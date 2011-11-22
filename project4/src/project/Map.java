@@ -29,8 +29,8 @@ public class Map {
 	BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB_PRE  );
 	int g; 
 	int b;
-	PieChart_ pie1;
-	PieChart_ pie2;
+	PieChart_ pieSex;
+	PieChart_ pieAge;
 	
 	public Map(DataClass d){
 		dataClass=d;
@@ -74,6 +74,17 @@ public class Map {
 		  //try{ImageIO.write(img, "png", f);}catch(Exception e){}
 
 		counter = 0;
+		 float[] data1 = {25,75};
+		 float[] data2 = {50,10,40};
+		  String[] l1 = {"Male", "Female"};
+		  String[] l2 = {"Male", "Female", "sdf"};
+		  //adding piecharts 
+		  pieSex = new PieChart_(Utils.globalProcessing,Utils.globalProcessing.getWidth() - 320,Utils.globalProcessing.getHeight() - 225,100,100);
+		  pieSex.loadData(data1);
+		  pieSex.setLegend(l1);
+		  pieAge = new PieChart_(Utils.globalProcessing,Utils.globalProcessing.getWidth() - 320,Utils.globalProcessing.getHeight() - 115,100,100);
+		  pieAge.loadData(data2);
+		  pieAge.setLegend(l2);
 	}
 	
 	public void setDataClass(DataClass d)
@@ -206,23 +217,14 @@ public class Map {
 		  // end of Line Graph for play count
 		  Utils.globalProcessing.textAlign(Utils.globalProcessing.LEFT);
 		 
-		  float[] data1 = {25,75};
-		  float[] data2 = {50,10,40};
-		  String[] l1 = {"Male", "Female"};
-		  String[] l2 = {"Male", "Female", "sdf"};
-		  //adding piecharts 
-		  pie1 = new PieChart_(Utils.globalProcessing,Utils.globalProcessing.getWidth() - 320,Utils.globalProcessing.getHeight() - 225,100,100);
-		  pie1.loadData(data1);
-		  pie1.setLegend(l1);
-		  pie2 = new PieChart_(Utils.globalProcessing,Utils.globalProcessing.getWidth() - 320,Utils.globalProcessing.getHeight() - 115,100,100);
-		  pie2.loadData(data2);
-		  pie2.setLegend(l2);
-		  pie1.show();
-		  pie2.show();
+		 
+		  pieSex.show();
+		  pieAge.show();
 	}
-	void mouseClicked(){
+	void mouseClicked()
+	{
 		int mouseX = Utils.globalProcessing.mouseX, mouseY= Utils.globalProcessing.mouseY;
-		
+		String iso = "";
 		if(mouseX<=824 && mouseY<=440)
 		{
 			
@@ -233,13 +235,56 @@ public class Map {
 				if(index > 0)
 				{
 					int state_number = index - 1;
-					System.out.println(" " +isoCodeForShape.get(state_number));	
+					//System.out.println(" " +isoCodeForShape.get(state_number));
+					iso = isoCodeForShape.get(state_number);
+					//pieSex.updatePieChart(null, null, state_number);
+					//pieAge.updatePieChart(isoCodeForShape.get(state_number), details, type);
+					updatePieChart(iso);
 				}
 			}catch(IndexOutOfBoundsException outboundException)
 			{
 				System.out.println(outboundException.toString());
 			}	
 		}
+		
+	}
+	
+	void updatePieChart(String iso)
+	{
+		Country c = dataClass.getCountryByCode(iso);
+		if(c == null || iso =="") return;
+		
+		float ageCount[] = new float[6];
+		float sexCount[] = new float[3];
+		String ages[] = {"13-18","19-24","25-35","36-45","46-64","above 65"};
+		String sexes[] = {"Male","Female","Unknown"};
+		
+		ageCount[0] = c.getAgeGroupCount(13);
+		ageCount[1] = c.getAgeGroupCount(19);
+		ageCount[2] = c.getAgeGroupCount(25);
+		ageCount[3] = c.getAgeGroupCount(36);
+		ageCount[4] = c.getAgeGroupCount(46);
+		ageCount[5] = c.getAgeGroupCount(65);
+		
+		int total = 0;
+		for(int i=0; i <6; i++) total += ageCount[i];
+		for(int i=0; i <6; i++) ageCount[i] = ageCount[i] * 100 /total;
+		
+		sexCount[0] = c.getMaleListeners();
+		sexCount[1] = c.getFemaleListeners();
+		sexCount[2] = c.getUnknownListeners();
+		total = 0;
+		for(int i=0; i <3; i++) total += sexCount[i];
+		for(int i=0; i <3; i++) sexCount[i] = sexCount[i] * 100 /total;
+		
+		pieSex.loadData(sexCount);
+		pieSex.setLegend(sexes);
+		
+		pieAge.loadData(ageCount);
+		pieAge.setLegend(ages);
+		
+		pieSex.show();
+		pieAge.show();
 		
 	}
 }
